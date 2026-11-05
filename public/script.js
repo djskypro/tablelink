@@ -337,3 +337,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 fetchLiveMenu(); updateNavbar(); renderCart();
+
+// --- TABLELINK PRO BANNER LOGIC ---
+window.openProModal = function() {
+    const modal = document.getElementById('proModal');
+    if (modal) modal.classList.add('open');
+};
+
+async function checkProStatus() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    const { data: profile } = await supabaseClient.from('profiles').select('is_pro').eq('id', session.user.id).single();
+    
+    if (profile && profile.is_pro === false) {
+        const banner = document.getElementById('proUpgradeBanner');
+        if (banner) banner.style.display = 'flex';
+    }
+}
+
+// Call this when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    checkProStatus();
+});

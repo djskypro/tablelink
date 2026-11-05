@@ -63,6 +63,15 @@
         <div id="cartItems" class="cart-items">
             <p class="empty-cart-text">Your cart is empty.</p>
         </div>
+
+        <div id="proUpgradeBanner" class="pro-banner" onclick="openProModal()" style="display: none;">
+            <div class="pro-icon">⭐</div>
+            <div class="pro-text">
+                <h4>Upgrade to PRO</h4>
+                <p>Get 2x coins on every order.</p>
+            </div>
+            <div class="pro-arrow">›</div>
+        </div>
         <div class="cart-footer">
             <div class="cart-total"><span>Total:</span><span id="cartTotalAmount">UGX 0</span></div>
             <button id="checkoutBtn" class="btn-primary">Checkout</button>
@@ -115,6 +124,24 @@
             <div class="map-footer">
                 <a id="googleMapsNavBtn" href="#" target="_blank" class="btn-primary">Start Navigation</a>
             </div>
+        </div>
+    </div>
+
+
+    <div id="proModal" class="rating-modal">
+        <div class="rating-modal-content" style="text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 10px;">⭐</div>
+            <h2 style="margin-top: 0; color: #0F172A;">TABLELINK PRO</h2>
+            <p style="color: #64748B; font-size: 0.95rem; margin-bottom: 20px;">Upgrade your dining experience for just <strong>UGX 5,000 / month</strong>.</p>
+            
+            <ul style="text-align: left; color: #1E293B; font-size: 0.9rem; line-height: 1.8; margin-bottom: 25px; padding-left: 20px; font-weight: 500;">
+                <li>🪙 <strong>2x Coins:</strong> Earn double loyalty points on every order.</li>
+                <li>⚡ <strong>Express Pass:</strong> Your food is bumped to the top of the kitchen queue.</li>
+                <li>🛡️ <strong>Priority Support:</strong> Direct WhatsApp line to TABLELINK.</li>
+            </ul>
+
+            <a href="https://wa.me/256707103377?text=Hello%20Admin,%20I%20want%20to%20subscribe%20to%20TABLELINK%20PRO." target="_blank" class="btn-primary" style="display: block; text-decoration: none; margin-bottom: 10px;">💬 Subscribe via WhatsApp</a>
+            <button onclick="document.getElementById('proModal').classList.remove('open')" class="close-modal-btn">Maybe Later</button>
         </div>
     </div>
 

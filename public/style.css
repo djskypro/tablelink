@@ -146,3 +146,23 @@ textarea { width: 100%; padding: 15px; border: 1px solid var(--border); border-r
 .action-btn.primary:hover {
     background: var(--primary-hover);
 }
+
+/* TABLELINK PRO BANNER */
+.pro-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #FFF0E6 0%, #FFE4CC 100%);
+    border: 1px solid #E5A93B;
+    padding: 12px 16px;
+    border-radius: 16px;
+    margin: 0 20px 15px 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.pro-banner:hover { transform: scale(1.02); }
+.pro-icon { font-size: 1.5rem; }
+.pro-text { flex: 1; }
+.pro-text h4 { margin: 0; font-size: 0.95rem; color: #0F172A; font-weight: 800; }
+.pro-text p { margin: 2px 0 0 0; font-size: 0.8rem; color: #D4982A; font-weight: 600; }
+.pro-arrow { font-size: 1.5rem; color: #E5A93B; font-weight: bold; }
