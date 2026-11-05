@@ -19,19 +19,19 @@ async function initProfile() {
 async function fetchWallets() {
     const container = document.getElementById('walletsContainer');
     
-    // Fetch wallets and join with restaurants to get their names
     const { data, error } = await supabaseClient
         .from('loyalty_wallets')
         .select(`coins, restaurants ( name )`)
         .eq('user_id', currentUser.id);
 
     if (error) {
-        container.innerHTML = `<p style="color:red; font-size:0.9rem;">Error loading wallets: ${error.message}</p>`;
+        console.error("Wallet Fetch Error:", error);
+        container.innerHTML = `<p style="color:red; font-size:0.9rem;">Error: ${error.message}</p>`;
         return;
     }
 
     if (!data || data.length === 0) {
-        container.innerHTML = `<p style="color: #94A3B8; font-size: 0.9rem;">You haven't earned any coins yet. Place an order to start earning!</p>`;
+        container.innerHTML = `<p style="color: #94A3B8; font-size: 0.9rem; text-align:center;">You haven't earned any coins yet. Place an order to start earning!</p>`;
         return;
     }
 
@@ -47,27 +47,28 @@ async function fetchWallets() {
     });
 }
 
-// --- MODAL LOGIC ---
+// --- MODAL FLOW ---
+window.openWalletModal = function() {
+    document.getElementById('walletModal').classList.add('open');
+};
+
 window.openSettingsModal = function() {
+    document.getElementById('walletModal').classList.remove('open');
     document.getElementById('settingsModal').classList.add('open');
 };
 
+window.openDeleteModal = function() {
+    document.getElementById('settingsModal').classList.remove('open');
+    document.getElementById('deleteModal').classList.add('open');
+};
+
 // Delete Account Logic
-const modal = document.getElementById('deleteModal');
 const verifyEmailInput = document.getElementById('verifyEmail');
 const verifyTextInput = document.getElementById('verifyText');
 const confirmBtn = document.getElementById('confirmDeleteBtn');
 
-document.getElementById('openDeleteModal').addEventListener('click', () => {
-    document.getElementById('settingsModal').classList.remove('open');
-    verifyEmailInput.value = '';
-    verifyTextInput.value = '';
-    confirmBtn.disabled = true;
-    modal.classList.add('open');
-});
-
 document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
-    modal.classList.remove('open');
+    document.getElementById('deleteModal').classList.remove('open');
     document.getElementById('settingsModal').classList.add('open');
 });
 
