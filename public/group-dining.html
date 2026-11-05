@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TABLELINK — Group Dining</title>
+    <link rel="stylesheet" href="style.css?v=202">
+    <style>
+        body { background: #faf7f2; margin: 0; padding-bottom: 50px; font-family: 'DM Sans', sans-serif; }
+        .page-header { background: white; padding: 20px; border-bottom: 1px solid #e8e0d8; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+        .page-header h2 { margin: 0; font-size: 1.2rem; color: #1a1a1a; }
+        .back-btn { text-decoration: none; color: #e85d04; font-weight: bold; font-size: 0.9rem; }
+        .container { max-width: 500px; margin: 20px auto; padding: 0 15px; }
+        .card { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: bold; color: #64748b; margin-bottom: 5px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-family: inherit; font-size: 1rem; background: #f8fafc; box-sizing: border-box; }
+        .btn-primary { width: 100%; padding: 14px; background: #e85d04; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 10px; }
+        #share-section { display: none; text-align: center; }
+        .success-icon { font-size: 3rem; margin-bottom: 10px; }
+        .share-link-box { display: flex; margin: 20px 0; background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 10px; align-items: center; }
+        .share-link-box input { border: none; background: transparent; flex: 1; font-size: 0.9rem; color: #1e293b; outline: none; }
+        .copy-btn { background: #1e293b; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .whatsapp-btn { display: block; width: 100%; padding: 14px; background: #25D366; color: white; text-align: center; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 1rem; margin-top: 15px; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <a href="index.html" id="backToFoodBtn" class="back-btn">← Back to Food</a>
+        <h2>Group Dining</h2>
+        <div style="width: 80px;"></div> 
+    </div>
+
+    <div class="container">
+        <div id="create-section" class="card">
+            <h2 style="margin-top:0; color:#1e293b;">Host a Group Meal</h2>
+            <p style="color:#64748b; font-size:0.9rem; margin-bottom:20px;">Invite friends, let everyone pick their own food, and submit one combined order.</p>
+            <div class="form-group">
+                <label>Event Name</label>
+                <input type="text" id="groupName" placeholder="e.g. Friday Lunch Squad">
+            </div>
+            <div class="form-group">
+                <label>Select Restaurant</label>
+                <select id="groupRestaurant">
+                    <option value="">Loading restaurants...</option>
+                </select>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <div class="form-group" style="flex:1;">
+                    <label>Date</label>
+                    <input type="date" id="groupDate">
+                </div>
+                <div class="form-group" style="flex:1;">
+                    <label>Time</label>
+                    <input type="time" id="groupTime">
+                </div>
+            </div>
+            <button id="createGroupBtn" class="btn-primary">Create Group & Get Link</button>
+        </div>
+
+        <div id="share-section" class="card">
+            <div class="success-icon">🎉</div>
+            <h2 style="margin-top:0; color:#1e293b;">Group Created!</h2>
+            <p style="color:#64748b; font-size:0.9rem;">Share this link with your friends so they can join and pick their food.</p>
+            <div class="share-link-box">
+                <input type="text" id="shareLinkInput" readonly>
+                <button class="copy-btn" id="copyBtn">Copy</button>
+            </div>
+            <a href="#" id="whatsappShareBtn" class="whatsapp-btn" target="_blank">Share on WhatsApp</a>
+            <a href="#" id="goToGroupBtn" class="btn-primary" style="display:block; margin-top:15px; text-decoration:none; text-align:center; background:#1e293b;">Go to Group Room →</a>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="group-dining.js?v=202"></script>
+</body>
+</html>

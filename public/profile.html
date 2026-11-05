@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TABLELINK — My Profile</title>
+    <link rel="stylesheet" href="style.css?v=135">
+    <style>
+        body { background: #faf7f2; margin: 0; padding-bottom: 50px; font-family: 'DM Sans', sans-serif; }
+        .page-header { background: white; padding: 20px; border-bottom: 1px solid #e8e0d8; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+        .page-header h2 { margin: 0; font-size: 1.2rem; color: #1a1a1a; }
+        .back-btn { text-decoration: none; color: #e85d04; font-weight: bold; font-size: 0.9rem; }
+        
+        .container { max-width: 500px; margin: 30px auto; padding: 0 15px; }
+        .profile-card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); text-align: center; margin-bottom: 20px; }
+        .avatar { width: 80px; height: 80px; background: #e85d04; color: white; font-size: 2rem; font-weight: bold; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 auto 15px; }
+        .profile-card h3 { margin: 0 0 5px; color: #1e293b; }
+        .profile-card p { margin: 0; color: #64748b; font-size: 0.9rem; }
+
+        /* DANGER ZONE */
+        .danger-zone { background: #fff1f2; border: 1px solid #fecdd3; padding: 20px; border-radius: 16px; text-align: center; margin-top: 20px; }
+        .danger-zone h4 { color: #be123c; margin-top: 0; margin-bottom: 10px; }
+        .danger-zone p { color: #9f1239; font-size: 0.85rem; margin-bottom: 15px; }
+        .delete-link { background: none; border: 1px solid #be123c; color: #be123c; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+        .delete-link:hover { background: #be123c; color: white; }
+
+        /* MODAL */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 9999; }
+        .modal-overlay.open { display: flex; }
+        .modal-box { background: white; padding: 30px; border-radius: 16px; max-width: 400px; width: 100%; text-align: center; }
+        .modal-box h2 { color: #be123c; margin-top: 0; }
+        .modal-box p { font-size: 0.9rem; color: #475569; margin-bottom: 20px; }
+        .modal-box input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 15px; font-family: inherit; font-size: 1rem; box-sizing: border-box; }
+        .modal-box button { width: 100%; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; border: none; margin-bottom: 10px; }
+        .btn-confirm-delete { background: #be123c; color: white; }
+        .btn-confirm-delete:disabled { background: #fda4af; cursor: not-allowed; }
+        .btn-cancel { background: #f1f5f9; color: #475569; }
+    </style>
+</head>
+<body>
+
+    <div class="page-header">
+        <a href="index.html" class="back-btn">← Back</a>
+        <h2>My Profile</h2>
+        <div style="width: 60px;"></div>
+    </div>
+
+    <div class="container">
+        <div class="profile-card">
+            <div class="avatar" id="avatarLetter">U</div>
+            <h3 id="profileName">Loading...</h3>
+            <p id="profileEmail">...</p>
+        </div>
+
+        <!-- PUSH NOTIFICATIONS BUTTON IS HERE -->
+        <div class="profile-card" style="text-align: left;">
+            <h4 style="margin-top:0; color:#1e293b;">🔔 Notifications</h4>
+            <p style="color:#64748b; font-size:0.85rem; margin-bottom:15px;">Get alerted when your food is ready, even if the app is closed.</p>
+            <button onclick="subscribeToPush()" style="width:100%; padding:12px; background:#e85d04; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Enable Push Notifications</button>
+        </div>
+
+        <!-- HIDDEN DANGER ZONE -->
+        <div class="danger-zone">
+            <h4>⚠️ Danger Zone</h4>
+            <p>Once you delete your account, there is no going back. All your orders, bookings, and data will be permanently erased.</p>
+            <button class="delete-link" id="openDeleteModal">Delete My Account</button>
+        </div>
+    </div>
+
+    <!-- 3-STEP VERIFICATION MODAL -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-box">
+            <h2>Are you absolutely sure?</h2>
+            <p>This will <strong>permanently delete</strong> your account and all associated data. This action cannot be undone.</p>
+            <p style="text-align: left; margin-bottom: 5px; font-weight: bold; font-size: 0.8rem;">1. Type your email to verify:</p>
+            <input type="email" id="verifyEmail" placeholder="Enter your email">
+            <p style="text-align: left; margin-bottom: 5px; font-weight: bold; font-size: 0.8rem;">2. Type DELETE in capital letters:</p>
+            <input type="text" id="verifyText" placeholder="Type DELETE">
+            <button class="btn-confirm-delete" id="confirmDeleteBtn" disabled>Permanently Delete</button>
+            <button class="btn-cancel" id="cancelDeleteBtn">Cancel</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="profile.js?v=135"></script>
+</body>
+</html>

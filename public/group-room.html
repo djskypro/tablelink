@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TABLELINK — Group Room</title>
+    <link rel="stylesheet" href="style.css?v=22">
+    <style>
+        body { background: #faf7f2; margin: 0; padding-bottom: 80px; font-family: 'DM Sans', sans-serif; }
+        .header { background: #1e293b; color: white; padding: 20px; border-radius: 0 0 20px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .header h1 { margin: 0 0 5px; font-size: 1.4rem; }
+        .header p { margin: 0; font-size: 0.85rem; color: #94a3b8; }
+        
+        .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+        
+        /* Menu Grid */
+        .menu-item { background: white; border-radius: 12px; padding: 15px; margin-bottom: 12px; display: flex; gap: 15px; border: 1px solid #e2e8f0; align-items: center; }
+        .menu-item img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; }
+        .menu-info { flex: 1; }
+        .menu-info h4 { margin: 0 0 5px; color: #1e293b; }
+        .menu-info p { margin: 0; font-size: 0.85rem; color: #e85d04; font-weight: bold; }
+        
+        .qty-controls { display: flex; align-items: center; gap: 10px; background: #f1f5f9; padding: 5px 10px; border-radius: 8px; }
+        .qty-btn { background: white; border: 1px solid #cbd5e1; width: 30px; height: 30px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .qty-display { font-weight: bold; min-width: 20px; text-align: center; }
+
+        /* Bottom Bar */
+        .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px; box-shadow: 0 -4px 10px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+        .total-price { font-size: 1.2rem; font-weight: 700; color: #1e293b; }
+        .submit-btn { background: #e85d04; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1 id="eventTitle">Loading Group...</h1>
+        <p id="eventDetails">...</p>
+        <p id="userRole" style="color: #fbbf24; font-weight: bold; margin-top: 10px;">...</p>
+    </div>
+
+    <div class="container">
+        <h3 style="color: #1e293b;">Menu</h3>
+        <div id="menuContainer">Loading menu...</div>
+    </div>
+
+    <!-- BOTTOM BAR (Organizer only) -->
+    <div class="bottom-bar" id="organizerBar" style="display: none;">
+        <div>
+            <div style="font-size: 0.8rem; color: #64748b;">Total Group Order</div>
+            <div class="total-price" id="groupTotal">UGX 0</div>
+        </div>
+        <button class="submit-btn" id="submitGroupOrderBtn">Submit Order</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="group-room.js?v=22"></script>
+</body>
+</html>

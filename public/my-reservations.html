@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TABLELINK — My Bookings</title>
+    <link rel="stylesheet" href="style.css?v=203">
+    <style>
+        body { background: #faf7f2; margin: 0; padding-bottom: 50px; }
+        .page-header { background: white; padding: 20px; border-bottom: 1px solid #e8e0d8; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+        .page-header h2 { margin: 0; font-size: 1.2rem; color: #1a1a1a; }
+        .back-btn { text-decoration: none; color: #e85d04; font-weight: bold; font-size: 0.9rem; }
+        .orders-container { max-width: 600px; margin: 20px auto; padding: 0 15px; display: flex; flex-direction: column; gap: 15px; }
+        .order-card { background: white; border-radius: 12px; border: 1px solid #e8e0d8; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
+        .order-header { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px dashed #e8e0d8; background: #fdfbf7; }
+        .order-header h3 { margin: 0; font-size: 1rem; color: #1a1a1a; }
+        .status-badge { padding: 4px 10px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+        .status-pending { background: #fef3c7; color: #b45309; }
+        .status-confirmed { background: #d1fae5; color: #065f46; }
+        .status-rejected { background: #fee2e2; color: #991b1b; }
+        .status-cancelled { background: #f1f5f9; color: #475569; }
+        .order-details { padding: 15px; }
+        .restaurant-info strong { font-size: 1.05rem; color: #1a1a1a; display: block; }
+        .restaurant-info span { font-size: 0.85rem; color: #6b6b6b; }
+        .booking-meta { margin-top: 12px; background: #f8fafc; padding: 12px; border-radius: 8px; font-size: 0.9rem; color: #333; }
+        .booking-meta p { margin: 4px 0; }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <a href="index.html" id="backToFoodBtn" class="back-btn">← Back to Food</a>
+        <h2>My Bookings</h2>
+        <div style="width: 80px;"></div> 
+    </div>
+    <div class="orders-container" id="reservationsContainer">
+        <p style="text-align: center; color: #6b6b6b; margin-top: 40px;">Loading your bookings...</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="my-reservations.js?v=203"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TABLELINK — Upgrade to Premium</title>
+    <link rel="stylesheet" href="style.css?v=140">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { background: #0f172a; color: white; margin: 0; font-family: 'DM Sans', sans-serif; padding-bottom: 50px; }
+        .header { text-align: center; padding: 40px 20px; background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); }
+        .header h1 { margin: 0 0 10px; font-size: 2rem; color: #fbbf24; }
+        .header p { color: #94a3b8; font-size: 1rem; }
+        
+        .pricing-container { max-width: 900px; margin: -20px auto 40px; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 768px) { .pricing-container { grid-template-columns: 1fr; } }
+
+        .card { background: #1e293b; border-radius: 20px; padding: 30px; border: 1px solid #334155; position: relative; display: flex; flex-direction: column; }
+        .card.popular { border: 2px solid #e85d04; box-shadow: 0 10px 30px rgba(232,93,4,0.15); }
+        .card.vvip { border: 2px solid #38bdf8; box-shadow: 0 10px 30px rgba(56,189,248,0.15); }
+        
+        .badge { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: #e85d04; color: white; padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; white-space: nowrap; }
+        .badge.vvip-badge { background: #38bdf8; color: #0f172a; }
+
+        .card h2 { margin: 0 0 10px; font-size: 1.5rem; }
+        .price { font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; color: #e2e8f0; }
+        .price span { font-size: 1rem; color: #94a3b8; font-weight: normal; }
+        
+        .features { list-style: none; padding: 0; margin: 0 0 30px; flex: 1; }
+        .features li { padding: 10px 0; border-bottom: 1px solid #334155; color: #cbd5e1; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
+        .features li::before { content: '✅'; }
+
+        .btn-pay { width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 1rem; cursor: pointer; border: none; transition: 0.2s; }
+        .btn-pay.vip-btn { background: #e85d04; color: white; }
+        .btn-pay.vvip-btn { background: #38bdf8; color: #0f172a; }
+        .btn-pay:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        /* MoMo Modal */
+        .momo-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 9999; }
+        .momo-modal.open { display: flex; }
+        .momo-box { background: white; color: #1e293b; border-radius: 20px; padding: 30px; max-width: 400px; width: 100%; text-align: center; }
+        .momo-box h3 { margin-top: 0; color: #e85d04; }
+        .momo-detail { background: #f8fafc; border: 1px dashed #cbd5e1; padding: 15px; border-radius: 10px; margin: 20px 0; font-size: 1.1rem; }
+        .momo-detail strong { display: block; font-size: 1.3rem; color: #0f172a; margin-bottom: 5px; }
+        .copy-btn { background: #1e293b; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .wa-btn { display: block; width: 100%; background: #25D366; color: white; text-decoration: none; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 1rem; margin-top: 15px; box-sizing: border-box; }
+        .close-modal { background: none; border: none; color: #64748b; text-decoration: underline; margin-top: 15px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🚀 Take Your Restaurant to the Next Level</h1>
+        <p>Choose a plan that fits your business and unlock powerful tools.</p>
+    </div>
+
+    <div class="pricing-container">
+        
+        <!-- VIP CARD -->
+        <div class="card popular">
+            <div class="badge">MOST POPULAR</div>
+            <h2>⭐ VIP Plan</h2>
+            <div class="price">UGX 300,000 <span>/ month</span></div>
+            <ul class="features">
+                <li>Unlimited Dishes</li>
+                <li>Call Waiter & Request Bill</li>
+                <li>Push Notifications</li>
+                <li>Up to 2 Dashboard Devices</li>
+                <li>Basic Sales Analytics</li>
+            </ul>
+            <button onclick="openMomo('VIP', '300,000')" class="btn-pay vip-btn">Upgrade to VIP</button>
+        </div>
+
+        <!-- VVIP CARD -->
+        <div class="card vvip">
+            <div class="badge vvip-badge">ENTERPRISE</div>
+            <h2>💎 VVIP Plan</h2>
+            <div class="price">UGX 750,000 <span>/ month</span></div>
+            <ul class="features">
+                <li>Everything in VIP</li>
+                <li>Up to 5 Dashboard Devices</li>
+                <li>Featured on Homepage</li>
+                <li>Advanced Analytics & Charts</li>
+                <li>Priority WhatsApp Support</li>
+            </ul>
+            <button onclick="openMomo('VVIP', '750,000')" class="btn-pay vvip-btn">Upgrade to VVIP</button>
+        </div>
+
+    </div>
+
+    <!-- MOMO MODAL -->
+    <div id="momoModal" class="momo-modal">
+        <div class="momo-box">
+            <h3>Complete Payment</h3>
+            <p style="font-size: 0.9rem; color: #475569;">Send <strong id="momoAmount">UGX 300,000</strong> to the Mobile Money number below:</p>
+            
+            <div class="momo-detail">
+                <strong>Mugabi Erisa</strong>
+                +256 707 103 377
+                <br>
+                <button class="copy-btn" onclick="copyNumber()">📋 Copy Number</button>
+            </div>
+
+            <p style="font-size: 0.85rem; color: #64748b;">After sending the money, click the button below to verify your payment with the Admin.</p>
+            
+            <a id="waVerifyBtn" href="#" target="_blank" class="wa-btn">✅ I Have Paid - Verify on WhatsApp</a>
+            <button class="close-modal" onclick="document.getElementById('momoModal').classList.remove('open')">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedPlan = '';
+        let selectedPrice = '';
+
+        function openMomo(plan, price) {
+            selectedPlan = plan;
+            selectedPrice = price;
+            document.getElementById('momoAmount').textContent = `UGX ${price}`;
+            
+            // Setup WhatsApp Link
+            const waNumber = '256707103377';
+            const message = encodeURIComponent(`Hello Admin, I have just paid UGX ${price} for the ${plan} Plan on TABLELINK. Please verify my account so I can unlock my features.`);
+            document.getElementById('waVerifyBtn').href = `https://wa.me/${waNumber}?text=${message}`;
+            
+            document.getElementById('momoModal').classList.add('open');
+        }
+
+        function copyNumber() {
+            navigator.clipboard.writeText('0707103377');
+            alert('✅ Number copied! Paste it in your Mobile Money app.');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TABLELINK — Sign In</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #faf7f2; padding: 20px; }
+        .auth-wrap { max-width: 400px; margin: 40px auto; background: #fff; padding: 28px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .auth-wrap h2 { margin-bottom: 16px; color: #1a1a1a; }
+        .auth-wrap input, .auth-wrap button { width: 100%; padding: 12px; margin: 6px 0; border-radius: 10px; border: 1px solid #e8e0d8; font-size: 1rem; box-sizing: border-box; font-family: inherit; }
+        .auth-wrap button { background: #e85d04; color: white; border: none; font-weight: 700; cursor: pointer; }
+        .auth-wrap button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .auth-wrap button.alt { background: #0f172a; }
+        .auth-wrap button.logout { background: #6b7280; }
+        #status { padding: 12px; background: #eee; border-radius: 10px; margin-bottom: 16px; font-size: 0.9rem; }
+        #msg { margin-top: 12px; padding: 10px; font-size: 0.9rem; border-radius: 8px; min-height: 20px; }
+        #msg.error { background: #fee2e2; color: #991b1b; }
+        #msg.success { background: #d1fae5; color: #065f46; }
+        #msg.info { background: #dbeafe; color: #1e40af; }
+        hr { margin: 20px 0; border: none; border-top: 1px solid #e8e0d8; }
+        .back-link { display: inline-block; margin-bottom: 12px; color: #6b6b6b; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { color: #e85d04; }
+    </style>
+</head>
+<body>
+    <div class="auth-wrap">
+        <a href="index.html" class="back-link">← Back to TABLELINK</a>
+        <a href="restaurant-auth.html" target="_blank" style="float:right; margin-bottom:12px; color:#e85d04; text-decoration:none; font-size:0.9rem; font-weight:bold;">Restaurant Owner? Partner Portal →</a>
+        <h2>Welcome</h2>
+        <div id="status">Checking session...</div>
+
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password (6+ characters)">
+        <input type="text" id="fullname" placeholder="Full name (for sign up only)">
+
+        <button id="signup">Sign Up</button>
+        <hr>
+        <button id="login" class="alt">Login</button>
+        <button id="logout" class="logout">Logout</button>
+
+        <div id="msg"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script>
+        const $ = id => document.getElementById(id);
+        const statusEl = $('status');
+        const msgEl = $('msg');
+
+        function setMsg(text, type) {
+            msgEl.textContent = text;
+            msgEl.className = type || '';
+        }
+
+        async function refresh() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session) {
+                statusEl.innerHTML = '✅ Logged in as <strong>' + session.user.email + '</strong>';
+                statusEl.style.background = '#d1fae5';
+            } else {
+                statusEl.textContent = 'Not logged in.';
+                statusEl.style.background = '#eee';
+            }
+        }
+
+        $('signup').onclick = async () => {
+            setMsg('Signing up...', 'info');
+            const { data, error } = await supabaseClient.auth.signUp({
+                email: $('email').value.trim(),
+                password: $('password').value,
+                options: { data: { full_name: $('fullname').value.trim() } }
+            });
+
+            if (error) {
+                if (error.message.toLowerCase().includes('already')) {
+                    setMsg('That email is already registered. Tap Login below instead.', 'error');
+                } else {
+                    setMsg('Error: ' + error.message, 'error');
+                }
+                return;
+            }
+
+            // If Supabase returns a session immediately, we're logged in
+            if (data.session) {
+                setMsg('✅ Signed up & logged in! Redirecting...', 'success');
+                setTimeout(() => window.location.href = 'index.html', 1000);
+            } else {
+                setMsg('Sign up OK! Now tap Login below with the same email and password.', 'success');
+            }
+            refresh();
+        };
+
+        $('login').onclick = async () => {
+            setMsg('Logging in...', 'info');
+            const { error } = await supabaseClient.auth.signInWithPassword({
+                email: $('email').value.trim(),
+                password: $('password').value
+            });
+
+            if (error) {
+                if (error.message.toLowerCase().includes('invalid')) {
+                    setMsg('Wrong email or password. If you have not signed up yet, tap Sign Up first.', 'error');
+                } else {
+                    setMsg('Error: ' + error.message, 'error');
+                }
+                return;
+            }
+
+            setMsg('✅ Login OK! Redirecting to TABLELINK...', 'success');
+            setTimeout(() => window.location.href = 'index.html', 1000);
+        };
+
+        $('logout').onclick = async () => {
+            await supabaseClient.auth.signOut();
+            setMsg('Logged out.', 'info');
+            refresh();
+        };
+
+        refresh();
+    </script>
+</body>
+</html>

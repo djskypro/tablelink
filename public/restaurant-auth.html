@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TABLELINK — Restaurant Partner Portal</title>
+    <link rel="stylesheet" href="style.css?v=16">
+    <style>
+        body { background: #f4f7f6; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; font-family: 'DM Sans', sans-serif; }
+        .portal-card { background: white; padding: 30px; border-radius: 16px; max-width: 450px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .portal-card h1 { font-size: 1.5rem; margin-top: 0; color: #1e293b; text-align: center; }
+        .tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; }
+        .tab { flex: 1; padding: 10px; text-align: center; font-weight: bold; color: #64748b; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; }
+        .tab.active { color: #e85d04; border-bottom-color: #e85d04; }
+        .form-section { display: none; }
+        .form-section.active { display: block; animation: fadeIn 0.3s ease; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: bold; color: #64748b; margin-bottom: 5px; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-family: inherit; font-size: 1rem; background: #f8fafc; }
+        .form-group input:focus { outline: none; border-color: #e85d04; background: white; }
+        .btn-submit { width: 100%; padding: 14px; background: #e85d04; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 10px; }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+        .error-msg { color: #dc2626; font-size: 0.85rem; text-align: center; margin-top: 10px; display: none; }
+        .success-msg { color: #10b981; font-size: 0.85rem; text-align: center; margin-top: 10px; display: none; }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #64748b; text-decoration: none; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <div class="portal-card">
+        <h1>🍽️ Restaurant Portal</h1>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchAuthTab('login')">Partner Login</div>
+            <div class="tab" onclick="switchAuthTab('register')">Apply to Join</div>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <div id="login-section" class="form-section active">
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="login-email" required placeholder="owner@restaurant.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-submit" id="login-btn">Log In to Dashboard</button>
+                <p id="login-error" class="error-msg"></p>
+            </form>
+        </div>
+
+        <!-- REGISTER FORM -->
+        <div id="register-section" class="form-section">
+            <form id="register-form">
+                <div class="form-group">
+                    <label>Owner Name</label>
+                    <input type="text" id="reg-name" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="reg-email" required placeholder="owner@restaurant.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="reg-password" required minlength="6" placeholder="Min 6 characters">
+                </div>
+                <div class="form-group">
+                    <label>Restaurant Name</label>
+                    <input type="text" id="reg-rest-name" required placeholder="e.g. Acacia Kitchen">
+                </div>
+                <div class="form-group">
+                    <label>Cuisine Type</label>
+                    <input type="text" id="reg-cuisine" required placeholder="e.g. Ugandan, Italian">
+                </div>
+                <div class="form-group">
+                    <label>Location (Area)</label>
+                    <input type="text" id="reg-location" required placeholder="e.g. Kololo, Kampala">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="reg-phone" required placeholder="+256 700 000 000">
+                </div>
+                <div class="form-group" style="background:#fef3c7; padding:15px; border-radius:8px; border:1px solid #fcd34d;">
+                    <label style="color:#b45309;">📸 Verification: Upload a Photo of your Restaurant</label>
+                    <input type="file" id="reg-photo" accept="image/*" required style="background:transparent; border:none; padding:5px 0;">
+                    <p style="font-size:0.75rem; color:#b45309; margin:5px 0 0;">This helps us verify you are a real business.</p>
+                </div>
+                <button type="submit" class="btn-submit" id="register-btn">Submit Application</button>
+                <p id="register-error" class="error-msg"></p>
+                <p id="register-success" class="success-msg"></p>
+            </form>
+        </div>
+
+        <a href="index.html" class="back-link">← Back to Customer Site</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="restaurant-auth.js?v=16"></script>
+</body>
+</html>
