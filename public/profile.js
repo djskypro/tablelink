@@ -12,32 +12,42 @@ async function initProfile() {
     document.getElementById('profileEmail').textContent = email;
     document.getElementById('avatarLetter').textContent = name.charAt(0).toUpperCase();
 
-    // Fetch Wallets
     await fetchWallets();
 }
 
 async function fetchWallets() {
     const container = document.getElementById('walletsContainer');
     
-    const { data, error } = await supabaseClient
+    // 1. Fetch the wallets WITHOUT joining the restaurants table (avoids RLS errors)
+    const { data: wallets, error } = await supabaseClient
         .from('loyalty_wallets')
-        .select(`coins, restaurants ( name )`)
+        .select('coins, restaurant_id')
         .eq('user_id', currentUser.id);
 
     if (error) {
         console.error("Wallet Fetch Error:", error);
-        container.innerHTML = `<p style="color:red; font-size:0.9rem;">Error: ${error.message}</p>`;
+        container.innerHTML = `<p style="color:red; font-size:0.9rem;">Database Error: ${error.message}</p>`;
         return;
     }
 
-    if (!data || data.length === 0) {
+    if (!wallets || wallets.length === 0) {
         container.innerHTML = `<p style="color: #94A3B8; font-size: 0.9rem; text-align:center;">You haven't earned any coins yet. Place an order to start earning!</p>`;
         return;
     }
 
+    // 2. Get the names of the restaurants for those wallets
+    const restIds = wallets.map(w => w.restaurant_id);
+    const { data: restaurants } = await supabaseClient
+        .from('restaurants')
+        .select('id, name')
+        .in('id', restIds);
+
     container.innerHTML = '';
-    data.forEach(wallet => {
-        const restName = wallet.restaurants?.name || 'Unknown Restaurant';
+    wallets.forEach(wallet => {
+        // Find the restaurant name, or show a fallback
+        const rest = restaurants?.find(r => r.id === wallet.restaurant_id);
+        const restName = rest ? rest.name : 'Unknown Restaurant';
+        
         container.innerHTML += `
             <div class="wallet-item">
                 <strong>📍 ${restName}</strong>
@@ -50,6 +60,7 @@ async function fetchWallets() {
 // --- MODAL FLOW ---
 window.openWalletModal = function() {
     document.getElementById('walletModal').classList.add('open');
+    fetchWallets(); // Refresh coins every time they open it!
 };
 
 window.openSettingsModal = function() {
