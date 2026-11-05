@@ -4,37 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TABLELINK — My Profile</title>
-    <link rel="stylesheet" href="style.css?v=135">
+    <link rel="stylesheet" href="style.css?v=4001">
     <style>
-        body { background: #faf7f2; margin: 0; padding-bottom: 50px; font-family: 'DM Sans', sans-serif; }
-        .page-header { background: white; padding: 20px; border-bottom: 1px solid #e8e0d8; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
-        .page-header h2 { margin: 0; font-size: 1.2rem; color: #1a1a1a; }
-        .back-btn { text-decoration: none; color: #e85d04; font-weight: bold; font-size: 0.9rem; }
+        body { background: #F4F7F6; margin: 0; padding-bottom: 50px; font-family: 'Outfit', sans-serif; }
+        .page-header { background: white; padding: 20px; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+        .page-header h2 { margin: 0; font-size: 1.2rem; color: #0F172A; }
+        .back-btn { text-decoration: none; color: #64748B; font-weight: bold; font-size: 0.9rem; }
         
-        .container { max-width: 500px; margin: 30px auto; padding: 0 15px; }
-        .profile-card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); text-align: center; margin-bottom: 20px; }
-        .avatar { width: 80px; height: 80px; background: #e85d04; color: white; font-size: 2rem; font-weight: bold; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 auto 15px; }
-        .profile-card h3 { margin: 0 0 5px; color: #1e293b; }
-        .profile-card p { margin: 0; color: #64748b; font-size: 0.9rem; }
+        .container { max-width: 500px; margin: 30px auto; padding: 0 20px; }
+        .profile-card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(15,23,42,0.05); text-align: center; margin-bottom: 20px; }
+        .avatar { width: 80px; height: 80px; background: #0F172A; color: white; font-size: 2rem; font-weight: bold; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 auto 15px; }
+        .profile-card h3 { margin: 0 0 5px; color: #0F172A; font-size: 1.4rem; }
+        
+        /* Clickable Email */
+        #profileEmail { margin: 0; color: #E5A93B; font-size: 1rem; font-weight: 600; cursor: pointer; text-decoration: underline; padding: 5px; }
+        #profileEmail:hover { color: #D4982A; }
 
-        /* DANGER ZONE */
-        .danger-zone { background: #fff1f2; border: 1px solid #fecdd3; padding: 20px; border-radius: 16px; text-align: center; margin-top: 20px; }
-        .danger-zone h4 { color: #be123c; margin-top: 0; margin-bottom: 10px; }
-        .danger-zone p { color: #9f1239; font-size: 0.85rem; margin-bottom: 15px; }
-        .delete-link { background: none; border: 1px solid #be123c; color: #be123c; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
-        .delete-link:hover { background: #be123c; color: white; }
+        .profile-card h4 { margin-top:0; color: #0F172A; font-size: 1rem; }
+        .profile-card p { color:#64748B; font-size:0.85rem; margin-bottom:15px; }
+        .btn-enable { width:100%; padding:12px; background:#E5A93B; color:#0F172A; border:none; border-radius:8px; font-weight:bold; cursor:pointer; }
 
         /* MODAL */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 9999; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 9999; }
         .modal-overlay.open { display: flex; }
-        .modal-box { background: white; padding: 30px; border-radius: 16px; max-width: 400px; width: 100%; text-align: center; }
-        .modal-box h2 { color: #be123c; margin-top: 0; }
-        .modal-box p { font-size: 0.9rem; color: #475569; margin-bottom: 20px; }
-        .modal-box input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 15px; font-family: inherit; font-size: 1rem; box-sizing: border-box; }
-        .modal-box button { width: 100%; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; border: none; margin-bottom: 10px; }
-        .btn-confirm-delete { background: #be123c; color: white; }
-        .btn-confirm-delete:disabled { background: #fda4af; cursor: not-allowed; }
-        .btn-cancel { background: #f1f5f9; color: #475569; }
+        .modal-box { background: white; padding: 30px; border-radius: 24px; max-width: 400px; width: 100%; text-align: center; max-height: 90vh; overflow-y: auto; }
+        
+        .wallet-item { display: flex; justify-content: space-between; align-items: center; background: #F8FAFC; padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #E2E8F0; }
+        .wallet-item strong { color: #0F172A; font-size: 0.95rem; }
+        .wallet-coins { background: #E5A93B; color: #0F172A; font-weight: 800; padding: 4px 12px; border-radius: 50px; font-size: 0.9rem; }
+        
+        .danger-zone { margin-top: 30px; border-top: 2px dashed #E2E8F0; padding-top: 20px; }
+        .danger-zone h4 { color: #DC2626; margin-bottom: 10px; }
+        .delete-link { background: none; border: 1px solid #DC2626; color: #DC2626; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
+        
+        .modal-box input { width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 8px; margin-bottom: 15px; font-family: inherit; box-sizing: border-box; }
+        .btn-confirm-delete { background: #DC2626; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-bottom: 10px; }
+        .btn-confirm-delete:disabled { background: #FCA5A5; cursor: not-allowed; }
+        .btn-cancel { background: #F1F5F9; color: #475569; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -49,33 +55,52 @@
         <div class="profile-card">
             <div class="avatar" id="avatarLetter">U</div>
             <h3 id="profileName">Loading...</h3>
-            <p id="profileEmail">...</p>
+            <!-- CLICK THIS EMAIL TO OPEN SETTINGS & REWARDS -->
+            <p id="profileEmail" onclick="openSettingsModal()">Loading email...</p>
+            <p style="font-size: 0.75rem; color: #94A3B8; margin-top: 10px;">(Tap email to view Rewards & Settings)</p>
         </div>
 
-        <!-- PUSH NOTIFICATIONS BUTTON IS HERE -->
         <div class="profile-card" style="text-align: left;">
-            <h4 style="margin-top:0; color:#1e293b;">🔔 Notifications</h4>
-            <p style="color:#64748b; font-size:0.85rem; margin-bottom:15px;">Get alerted when your food is ready, even if the app is closed.</p>
-            <button onclick="subscribeToPush()" style="width:100%; padding:12px; background:#e85d04; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Enable Push Notifications</button>
-        </div>
-
-        <!-- HIDDEN DANGER ZONE -->
-        <div class="danger-zone">
-            <h4>⚠️ Danger Zone</h4>
-            <p>Once you delete your account, there is no going back. All your orders, bookings, and data will be permanently erased.</p>
-            <button class="delete-link" id="openDeleteModal">Delete My Account</button>
+            <h4>🔔 Notifications</h4>
+            <p>Get alerted when your food is ready, even if the app is closed.</p>
+            <button onclick="subscribeToPush()" class="btn-enable">Enable Push Notifications</button>
         </div>
     </div>
 
-    <!-- 3-STEP VERIFICATION MODAL -->
-    <div class="modal-overlay" id="deleteModal">
+    <!-- ACCOUNT & REWARDS MODAL -->
+    <div class="modal-overlay" id="settingsModal">
         <div class="modal-box">
-            <h2>Are you absolutely sure?</h2>
-            <p>This will <strong>permanently delete</strong> your account and all associated data. This action cannot be undone.</p>
-            <p style="text-align: left; margin-bottom: 5px; font-weight: bold; font-size: 0.8rem;">1. Type your email to verify:</p>
+            <h2 style="margin-top:0; color:#0F172A; font-size: 1.5rem;">Account & Rewards</h2>
+            
+            <div style="text-align: left; margin-bottom: 20px;">
+                <h4 style="margin-bottom: 15px; color: #64748B; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">🪙 My Loyalty Wallets</h4>
+                <div id="walletsContainer">
+                    <p style="color: #94A3B8; font-size: 0.9rem;">Loading your coins...</p>
+                </div>
+            </div>
+
+            <div class="danger-zone">
+                <h4>⚠️ Danger Zone</h4>
+                <p style="font-size: 0.85rem; color: #64748B; margin-bottom: 15px;">Once you delete your account, all your orders, bookings, and coins will be permanently erased.</p>
+                <button class="delete-link" id="openDeleteModal">Delete My Account</button>
+            </div>
+
+            <button class="btn-cancel" style="margin-top: 20px;" onclick="document.getElementById('settingsModal').classList.remove('open')">Close</button>
+        </div>
+    </div>
+
+    <!-- DELETE VERIFICATION MODAL -->
+    <div class="modal-overlay" id="deleteModal" style="z-index: 10000;">
+        <div class="modal-box">
+            <h2 style="color: #DC2626; margin-top: 0;">Are you sure?</h2>
+            <p style="font-size: 0.9rem; color: #475569;">This will permanently delete your account.</p>
+            
+            <p style="text-align: left; margin-bottom: 5px; font-weight: bold; font-size: 0.8rem;">Type your email to verify:</p>
             <input type="email" id="verifyEmail" placeholder="Enter your email">
-            <p style="text-align: left; margin-bottom: 5px; font-weight: bold; font-size: 0.8rem;">2. Type DELETE in capital letters:</p>
+            
+            <p style="text-align: left; margin-bottom: 5px; font-weight: bold; font-size: 0.8rem;">Type DELETE in capital letters:</p>
             <input type="text" id="verifyText" placeholder="Type DELETE">
+            
             <button class="btn-confirm-delete" id="confirmDeleteBtn" disabled>Permanently Delete</button>
             <button class="btn-cancel" id="cancelDeleteBtn">Cancel</button>
         </div>
@@ -83,6 +108,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
-    <script src="profile.js?v=135"></script>
+    <script src="profile.js?v=4001"></script>
 </body>
 </html>
