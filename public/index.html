@@ -149,5 +149,23 @@
     <script src="supabase-config.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="script.js?v=9999"></script>
+
+    <div id="aiChatBtn" style="position: fixed; bottom: 100px; right: 20px; z-index: 1000; background: #E5A93B; color: #0F172A; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 10px 25px rgba(229,169,59,0.4); cursor: pointer; transition: transform 0.2s;">🤖</div>
+
+    <div id="aiChatWindow" style="display: none; position: fixed; bottom: 170px; right: 20px; width: 320px; max-width: calc(100vw - 40px); background: white; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); z-index: 1000; flex-direction: column; overflow: hidden; border: 1px solid #E2E8F0;">
+        <div style="background: #0F172A; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-weight: 800; font-size: 0.95rem;">TABLELINK AI Agent</div>
+            <button id="closeAiChat" style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;">&times;</button>
+        </div>
+        <div id="aiChatMessages" style="padding: 20px; height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #F8FAFC; font-size: 0.9rem;">
+            <div style="background: white; padding: 10px 15px; border-radius: 0 12px 12px 12px; border: 1px solid #E2E8F0; align-self: flex-start; max-width: 85%;">Hello! I am the TABLELINK assistant. Ask me anything!</div>
+        </div>
+        <div style="padding: 10px; background: white; border-top: 1px solid #E2E8F0; display: flex; gap: 8px;">
+            <input type="text" id="aiChatInput" placeholder="Type a message..." style="flex: 1; padding: 10px; border: 1px solid #CBD5E1; border-radius: 20px; outline: none; font-size: 0.9rem;">
+            <button id="aiChatSend" style="background: #E5A93B; color: #0F172A; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-weight: bold;">➤</button>
+        </div>
+    </div>
+    <script src="ai-chat.js?v=1"></script>
+
 </body>
 </html>
