@@ -453,3 +453,16 @@ window.copyRestaurantLink = async function() {
         alert("✅ Link copied to clipboard!");
     }
 };
+
+// --- COPY RESTAURANT LINK ---
+window.copyRestaurantLink = function() {
+    const linkText = document.getElementById('qrLinkText').textContent;
+    if (!linkText || linkText === 'Loading...') return alert("Link not ready yet.");
+    
+    navigator.clipboard.writeText(linkText).then(() => {
+        if (window.showToast) window.showToast('Link Copied!', 'You can now share it.');
+        else alert("Link copied!");
+    }).catch(() => {
+        alert("Could not copy link.");
+    });
+};
