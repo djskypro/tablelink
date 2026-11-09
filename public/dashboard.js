@@ -466,3 +466,35 @@ window.copyRestaurantLink = function() {
         alert("Could not copy link.");
     });
 };
+
+// --- COPY RESTAURANT LINK ---
+window.copyRestaurantLink = async function() {
+    const linkElement = document.getElementById('qrLinkText');
+    const linkText = linkElement ? linkElement.textContent : '';
+    
+    if (!linkText || linkText === 'Loading...') {
+        return alert("Link is still loading. Please wait a moment.");
+    }
+
+    try {
+        await navigator.clipboard.writeText(linkText);
+        
+        const btn = event.target;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "✅ Copied!";
+        btn.style.background = "#10b981";
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = "#1e293b";
+        }, 2000);
+    } catch (err) {
+        const textArea = document.createElement("textarea");
+        textArea.value = linkText;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        alert("✅ Link copied to clipboard!");
+    }
+};
