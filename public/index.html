@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TABLELINK — Premium Eats</title>
+    <link rel="stylesheet" href="style.css?v=9999">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand">TABLELINK</a>
+            <nav class="nav-links">
+                <a href="auth.html" class="btn-outline">Sign In</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <span class="badge">Kampala's Finest</span>
+            <h1>Skip the wait.<br>Share the table.</h1>
+            <p class="hero-sub">Discover premium restaurants, reserve your spot, and pre-order meals instantly.</p>
+        </div>
+    </section>
+
+    <section class="discovery">
+        <div class="section-header">
+            <h2>Discover Restaurants</h2>
+            <a href="index.html" id="exploreAllBtn" class="explore-link" style="display: none;">🌍 See all restaurants</a>
+        </div>
+
+        <div class="filters">
+            <input type="text" id="searchInput" placeholder="Search by name, cuisine, or location...">
+            <button id="nearMeBtn">📍 Near Me</button>
+        </div>
+
+        <div class="restaurant-grid" id="restaurantGrid"></div>
+        <p class="empty-state" id="emptyState" style="display: none;">No restaurants match your search.</p>
+    </section>
+    <footer class="footer">
+        <p class="brand-small">TABLELINK</p>
+        <p class="footer-text"><span id="secretAdminBtn" style="cursor: pointer; padding: 15px;">©</span> 2026 TABLELINK. All rights reserved.</p>
+    </footer>
+
+    <div id="customerActionButtons" style="display: none;">
+        <button onclick="callWaiter('waiter')" class="action-btn">🔔 Call Waiter</button>
+        <button onclick="callWaiter('bill')" class="action-btn primary">🧾 Request Bill</button>
+    </div>
+
+    <button id="bookTableBtn" class="float-btn left">📅 Book Table</button>
+    <button id="cartToggleBtn" class="float-btn right">🛒 Cart <span id="cartBadge" class="badge">0</span></button>
+
+    <!-- CART PANEL -->
+    <div id="cartOverlay" class="cart-overlay"></div>
+    <div id="cartPanel" class="cart-panel">
+        <div class="cart-header">
+            <h3>Your Order</h3>
+            <button id="closeCartBtn" class="close-btn">&times;</button>
+        </div>
+        <div id="cartItems" class="cart-items">
+            <p class="empty-cart-text">Your cart is empty.</p>
+        </div>
+
+        <div id="proUpgradeBanner" class="pro-banner" onclick="openProModal()" style="display: none;">
+            <div class="pro-icon">⭐</div>
+            <div class="pro-text">
+                <h4>Upgrade to PRO</h4>
+                <p>Get 2x coins on every order.</p>
+            </div>
+            <div class="pro-arrow">›</div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total"><span>Total:</span><span id="cartTotalAmount">UGX 0</span></div>
+            <button id="checkoutBtn" class="btn-primary">Checkout</button>
+        </div>
+    </div>
+
+    <!-- RATING MODAL -->
+    <div id="ratingModal" class="rating-modal">
+        <div class="rating-modal-content">
+            <h2 id="ratingDishName">Rate this dish</h2>
+            <div id="starContainer" class="stars">
+                <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span><span class="star" data-value="3">★</span><span class="star" data-value="4">★</span><span class="star" data-value="5">★</span>
+            </div>
+            <textarea id="reviewText" placeholder="Tell us what you liked..." rows="3"></textarea>
+            <button id="submitRatingBtn" class="btn-primary">Submit Rating</button>
+            <button id="closeRatingBtn" class="close-modal-btn">Cancel</button>
+        </div>
+    </div>
+    <!-- RESERVATION MODAL -->
+    <div id="reservationModal" class="rating-modal">
+        <div class="rating-modal-content">
+            <h2>Book a Table</h2>
+            <div id="lockedRestaurantDisplay" class="locked-display" style="display: none;">
+                <span>Booking at:</span>
+                <strong id="lockedRestaurantName"></strong>
+            </div>
+            <label id="resDropdownLabel" class="form-label">Select Restaurant</label>
+            <select id="resRestaurant" class="form-input"><option value="">Loading...</option></select>
+            <div class="row">
+                <div class="col"><label class="form-label">Date</label><input type="date" id="resDate" class="form-input"></div>
+                <div class="col"><label class="form-label">Time</label><input type="time" id="resTime" class="form-input"></div>
+            </div>
+            <label class="form-label">Guests</label>
+            <input type="number" id="resPartySize" min="1" value="2" class="form-input">
+            <label class="form-label">Special Requests</label>
+            <textarea id="resRequests" placeholder="Window seat, birthday..." rows="2" class="form-input"></textarea>
+            <button id="submitReservationBtn" class="btn-primary">Confirm Booking</button>
+            <button id="closeReservationBtn" class="close-modal-btn">Cancel</button>
+        </div>
+    </div>
+
+    <!-- MAP MODAL -->
+    <div id="mapModal" class="rating-modal">
+        <div class="rating-modal-content" style="padding: 0; overflow: hidden; max-width: 600px;">
+            <div class="map-header">
+                <h3 id="mapRestaurantName">Location</h3>
+                <button id="closeMapBtn" class="close-btn">&times;</button>
+            </div>
+            <div id="mapContainer" style="height: 350px; width: 100%;"></div>
+            <div class="map-footer">
+                <a id="googleMapsNavBtn" href="#" target="_blank" class="btn-primary">Start Navigation</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="proModal" class="rating-modal">
+        <div class="rating-modal-content" style="text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 10px;">⭐</div>
+            <h2 style="margin-top: 0; color: #0F172A;">TABLELINK PRO</h2>
+            <p style="color: #64748B; font-size: 0.95rem; margin-bottom: 20px;">Upgrade your dining experience for just <strong>UGX 5,000 / month</strong>.</p>
+            
+            <ul style="text-align: left; color: #1E293B; font-size: 0.9rem; line-height: 1.8; margin-bottom: 25px; padding-left: 20px; font-weight: 500;">
+                <li>🪙 <strong>2x Coins:</strong> Earn double loyalty points on every order.</li>
+                <li>⚡ <strong>Express Pass:</strong> Your food is bumped to the top of the kitchen queue.</li>
+                <li>🛡️ <strong>Priority Support:</strong> Direct WhatsApp line to TABLELINK.</li>
+            </ul>
+
+            <a href="https://wa.me/256707103377?text=Hello%20Admin,%20I%20want%20to%20subscribe%20to%20TABLELINK%20PRO." target="_blank" class="btn-primary" style="display: block; text-decoration: none; margin-bottom: 10px;">💬 Subscribe via WhatsApp</a>
+            <button onclick="document.getElementById('proModal').classList.remove('open')" class="close-modal-btn">Maybe Later</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js?v=9999"></script>
+</body>
+</html>

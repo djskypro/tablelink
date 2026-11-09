@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TABLELINK — Restaurant Portal</title>
+    <link rel="stylesheet" href="style.css?v=301">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #e85d04; --bg: #f4f7f6; --surface: #ffffff; --text: #1e293b; --text-muted: #64748b; --border: #e2e8f0; }
+        body { background: var(--bg); margin: 0; display: flex; height: 100vh; overflow: hidden; font-family: 'DM Sans', sans-serif; color: var(--text); }
+        .tab-section { display: none; animation: fadeIn 0.3s ease; }
+        .tab-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .sidebar { width: 260px; background: #0f172a; color: white; display: flex; flex-direction: column; padding: 20px 0; z-index: 10; }
+        .sidebar .brand { color: white; padding: 0 25px 20px; border-bottom: 1px solid #1e293b; margin-bottom: 20px; font-size: 1.3rem; font-weight: 700; text-decoration: none; display: block; letter-spacing: -0.5px; }
+        .nav-item { padding: 14px 25px; color: #94a3b8; text-decoration: none; display: flex; align-items: center; gap: 12px; font-weight: 600; transition: all 0.2s; cursor: pointer; border: none; background: transparent; width: 100%; text-align: left; font-size: 0.95rem; }
+        .nav-item:hover, .nav-item.active { background: #1e293b; color: white; border-left: 4px solid var(--primary); }
+        .nav-item.active { background: linear-gradient(90deg, rgba(232,93,4,0.1) 0%, transparent 100%); }
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; width: 100%; }
+        .top-bar { background: var(--surface); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+        .top-bar h2 { margin: 0; font-size: 1.3rem; font-weight: 700; color: var(--text); }
+        .user-controls { display: flex; align-items: center; gap: 15px; }
+        .user-email { font-weight: 600; color: var(--text-muted); font-size: 0.85rem; }
+        .btn-logout { background: #fee2e2; color: #dc2626; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
+        .content-area { padding: 30px; overflow-y: auto; flex: 1; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .stat-card { background: var(--surface); padding: 25px; border-radius: 16px; border: 1px solid var(--border); position: relative; overflow: hidden; }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--primary); }
+        .stat-card h3 { margin: 0 0 10px; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+        .stat-card .value { font-size: 2.2rem; font-weight: 700; color: var(--text); line-height: 1; }
+        .card { background: var(--surface); padding: 25px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 20px; }
+        .card h3 { margin-top: 0; color: var(--text); font-size: 1.1rem; margin-bottom: 15px; }
+        .setup-form input { width: 100%; padding: 14px; margin-bottom: 15px; border: 1px solid #cbd5e1; border-radius: 10px; box-sizing: border-box; font-family: inherit; font-size: 1rem; background: #f8fafc; }
+        .btn-primary { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        .btn-primary:hover { background: #d05303; transform: translateY(-2px); }
+        .wait-time-container { display: flex; gap: 10px; flex-wrap: wrap; }
+        .wait-btn { flex: 1; padding: 12px; border-radius: 10px; border: 2px solid var(--border); background: white; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
+        .wait-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
+        .order-card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .order-card.pending { border-left: 5px solid #f59e0b; }
+        .order-card.accepted { border-left: 5px solid #10b981; }
+        .order-card.preparing { border-left: 5px solid #3b82f6; }
+        .order-card.ready { border-left: 5px solid #10b981; background: #f0fdf4; }
+        .order-actions { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+        .btn-accept { background: #10b981; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.9rem; width: 100%; }
+        .btn-reject { background: #ef4444; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.9rem; width: 100%; }
+        .prep-btn { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 8px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.8rem; color: var(--text); }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .menu-item-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border); }
+        .menu-item-row img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; }
+        .delete-btn { background: #fee2e2; color: #dc2626; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.85rem; }
+        .switch { position: relative; display: inline-block; width: 46px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #10b981; }
+        input:checked + .slider:before { transform: translateX(20px); }
+        .sold-out-item { opacity: 0.5; filter: grayscale(100%); }
+        .sold-out-badge { background: #ef4444; color: white; font-size: 0.7rem; font-weight: bold; padding: 2px 8px; border-radius: 4px; margin-left: 8px; }
+        #reader { border-radius: 20px; overflow: hidden; border: 3px solid var(--primary); }
+        #scanResult { display: none; background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 500px; margin: 0 auto; border-top: 8px solid #10b981; }
+        
+        .analytics-list-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+        .analytics-list-item:last-child { border-bottom: none; }
+        .analytics-list-item span:first-child { color: var(--text); font-weight: 600; }
+        .analytics-list-item span:last-child { color: var(--primary); font-weight: 700; }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; padding: 10px 0 0 0; flex-direction: row; overflow-x: auto; white-space: nowrap; }
+            .sidebar .brand { display: none; }
+            .nav-item { padding: 15px 20px; border-left: none !important; border-bottom: 4px solid transparent; justify-content: center; font-size: 0.9rem; }
+            .nav-item.active { border-bottom: 4px solid var(--primary); background: transparent; }
+            .top-bar { padding: 15px 20px; flex-direction: column; gap: 10px; text-align: center; }
+            .user-controls { width: 100%; justify-content: space-between; }
+            .content-area { padding: 20px 15px; }
+            .menu-grid { grid-template-columns: 1fr; }
+            .order-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .order-actions { width: 100%; flex-direction: row; justify-content: space-between; }
+            .btn-accept, .btn-reject { width: auto; flex: 1; }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="index.html" class="brand">🍽️ TABLELINK</a>
+        <button class="nav-item active" onclick="switchTab('overview', this)">📊 Overview</button>
+        <button class="nav-item" onclick="switchTab('orders', this)">🛎️ Live Orders</button>
+        <button class="nav-item" onclick="switchTab('scanner', this)">📷 Scan</button>
+        <button class="nav-item" onclick="switchTab('requests', this)">🔔 Requests</button>
+        <button class="nav-item" onclick="switchTab('reservations', this)">📅 Bookings</button>
+        <button class="nav-item" onclick="switchTab('menu', this)">🍔 Menu</button>
+        <button class="nav-item" onclick="switchTab('analytics', this)">📈 Analytics</button>
+        <button class="nav-item" onclick="switchTab('reviews', this)">⭐ Reviews</button>
+        <button class="nav-item" onclick="switchTab('qrcode', this)">📱 QR Code</button>
+        <button class="nav-item" id="update-gps-btn" style="color: #38bdf8; margin-top: auto;">📍 Update GPS</button>
+    </aside>
+
+    <main class="main-content">
+        <div class="top-bar">
+            <h2 id="page-title">Overview</h2>
+            <div class="user-controls">
+                <span id="owner-name" class="user-email">Loading...</span>
+                <button id="logout-btn" class="btn-logout">Logout</button>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div id="loading-section" style="text-align: center; margin-top: 50px;"><h2>Loading Dashboard...</h2></div>
+            
+            <div id="setup-section" style="display: none;">
+                <div class="card setup-form" style="max-width: 500px; margin: 0 auto;">
+                    <h2 style="margin-top:0; text-align:center;">Create Your Restaurant</h2>
+                    <input type="text" id="setup-name" placeholder="Restaurant Name">
+                    <input type="text" id="setup-cuisine" placeholder="Cuisine Type">
+                    <input type="text" id="setup-location" placeholder="Location">
+                    <button id="create-restaurant-btn" class="btn-primary">Create Restaurant</button>
+                </div>
+            </div>
+
+            <div id="dashboard-section" style="display: none;">
+                <div id="tab-overview" class="tab-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card"><h3>Live Orders</h3><div class="value" id="stat-live-orders">0</div></div>
+                        <div class="stat-card"><h3>Total Revenue</h3><div class="value" id="stat-revenue">UGX 0</div></div>
+                    </div>
+                    <div class="card">
+                        <h3>⏱️ Live Table Wait Time</h3>
+                        <div class="wait-time-container">
+                            <button class="wait-btn" onclick="updateWaitTime(0, this)">No Wait</button>
+                            <button class="wait-btn" onclick="updateWaitTime(15, this)">15 mins</button>
+                            <button class="wait-btn" onclick="updateWaitTime(30, this)">30 mins</button>
+                            <button class="wait-btn" onclick="updateWaitTime(60, this)">1 Hour+</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="tab-orders" class="tab-section"><h3>🔴 Real-Time Orders</h3><div id="orders-container"><p style="color:var(--text-muted); text-align:center; padding:40px;">No orders yet.</p></div></div>
+                
+                <div id="tab-scanner" class="tab-section">
+                    <div style="text-align: center; margin-bottom: 20px;"><h3>Scan Customer Ticket</h3></div>
+                    <div style="max-width: 500px; margin: 0 auto;">
+                        <div id="reader"></div>
+                        <div id="scanResult">
+                            <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
+                            <h2 style="color: var(--text); margin: 0 0 10px;">Ticket Verified!</h2>
+                            <h1 style="color: var(--primary); margin: 0 0 20px; font-size: 2rem;" id="scanOrderCode">#A7B2</h1>
+                            <div style="text-align: left; background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 20px;" id="scanOrderItems"></div>
+                            <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.2rem; margin-bottom: 25px;"><span>Total:</span><span id="scanOrderTotal">UGX 0</span></div>
+                            <button onclick="resetScanner()" class="btn-primary">Scan Next Ticket</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-requests" class="tab-section">
+                    <h3>🔔 Table Requests</h3>
+                    <p style="color: #64748b; margin-bottom: 15px;">Calls from customers who need help or want the bill.</p>
+                    <div id="requests-container"><p style="color:var(--text-muted); text-align:center; padding:40px;">No active requests.</p></div>
+                </div>
+
+                <div id="tab-reservations" class="tab-section"><h3>📅 Table Bookings</h3><div id="reservations-container"><p style="color:var(--text-muted); text-align:center; padding:40px;">Loading bookings...</p></div></div>
+                
+                <div id="tab-menu" class="tab-section">
+                    <div class="menu-grid">
+                        <div class="card setup-form">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h3 style="margin: 0;">Add Menu Item</h3>
+                                <span id="dishLimitBadge" style="font-size: 0.75rem; background: #e2e8f0; color: #1e293b; padding: 4px 8px; border-radius: 6px; font-weight: bold;">Loading...</span>
+                            </div>
+                            <input type="text" id="menu-name" placeholder="Dish Name">
+                            <input type="text" id="menu-desc" placeholder="Description">
+                            <input type="number" id="menu-price" placeholder="Price in UGX">
+                            <input type="file" id="menu-image" accept="image/*" style="padding:12px; border:1px solid #cbd5e1; border-radius:10px; width:100%; margin-bottom:15px; box-sizing:border-box;">
+                            <button id="add-menu-btn" class="btn-primary">Upload Dish</button>
+                        </div>
+                        <div class="card"><h3>Current Menu</h3><div id="menu-list-container">Loading...</div></div>
+                    </div>
+                </div>
+
+                <div id="tab-analytics" class="tab-section">
+                    <div id="analyticsContent">
+                        <h3>📈 Restaurant Analytics</h3>
+                        <div class="stats-grid" style="margin-top: 20px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                            <div class="stat-card" style="background: #e0f2fe; border-color: #bae6fd;">
+                                <h3 style="color: #0369a1;">Today's Orders</h3>
+                                <div class="value" id="analytics-today-orders" style="color: #0369a1;">0</div>
+                            </div>
+                            <div class="stat-card" style="background: #dcfce7; border-color: #bbf7d0;">
+                                <h3 style="color: #15803d;">Today's Revenue</h3>
+                                <div class="value" id="analytics-today-revenue" style="color: #15803d;">UGX 0</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3>All-Time Orders</h3>
+                                <div class="value" id="analytics-total-orders">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3>All-Time Revenue</h3>
+                                <div class="value" id="analytics-total-revenue">UGX 0</div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>🔥 Top 5 Best-Selling Dishes</h3>
+                            <div id="analytics-top-dishes"><p style="color: var(--text-muted);">Loading data...</p></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="tab-reviews" class="tab-section"><h3>⭐ Customer Reviews</h3><div class="card" id="reviews-container" style="padding: 0 20px;"><p style="color:var(--text-muted); text-align:center; padding:40px;">Loading reviews...</p></div></div>
+                
+                <div id="tab-qrcode" class="tab-section">
+                    <div class="card" style="text-align: center; max-width: 500px; margin: 0 auto;">
+                        <h3>Your Table QR Code</h3>
+                        <img id="qrImage" src="" style="width: 100%; max-width: 250px; height: auto; border-radius: 12px; margin-bottom:20px;">
+                        <div style="background: #f1f5f9; padding: 12px; border-radius: 8px; margin-bottom: 20px; word-break: break-all; font-size: 0.8rem;" id="qrLinkText"></div>
+                        <button id="downloadQrBtn" onclick="downloadQRImage()" class="btn-primary">📥 Download & Print QR Code</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- GPS MAP MODAL -->
+    <div id="gpsModal" class="rating-modal">
+        <div class="rating-modal-content" style="padding: 0; overflow: hidden; max-width: 600px; text-align: left;">
+            <div style="background: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0;">
+                <h3 style="margin: 0; font-size: 1.1rem; color: #1e293b;">📍 Pinpoint Your Restaurant</h3>
+                <button onclick="closeGpsModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+            </div>
+            <div style="padding: 10px; background: #f8fafc; display: flex; gap: 10px; border-bottom: 1px solid #e2e8f0;">
+                <input type="text" id="gpsSearchInput" placeholder="Search address..." style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none;">
+                <button onclick="searchGpsLocation()" style="background: #1e293b; color: white; border: none; padding: 0 15px; border-radius: 8px; font-weight: bold; cursor: pointer;">Search</button>
+            </div>
+            <div id="gpsMapContainer" style="height: 350px; width: 100%; z-index: 1000;"></div>
+            <div style="background: white; padding: 15px; display: flex; flex-direction: column; gap: 10px;">
+                <button onclick="useCurrentLocation()" style="background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">📍 Use My Current GPS Location</button>
+                <button onclick="saveConfirmedLocation()" class="btn-primary" style="border-radius: 8px;">✅ Confirm Location</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIMIT MODAL -->
+    <div id="limitModal" class="rating-modal">
+        <div class="rating-modal-content" style="text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🍔</div>
+            <h2 style="margin-top: 0; color: #1e293b;">Limit Reached</h2>
+            <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 20px;">You have reached the maximum of <strong>15 dishes</strong> on the Free Plan.</p>
+            <button onclick="window.location.href='payment.html'" class="btn-primary" style="width: 100%; border-radius: 8px; margin-bottom: 10px;">🚀 Upgrade Now</button>
+            <button onclick="document.getElementById('limitModal').classList.remove('open')" class="close-modal-btn" style="width: 100%; text-align: center;">Maybe Later</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="dashboard.js?v=301"></script>
+</body>
+</html>
