@@ -166,3 +166,8 @@ textarea { width: 100%; padding: 15px; border: 1px solid var(--border); border-r
 .pro-text h4 { margin: 0; font-size: 0.95rem; color: #0F172A; font-weight: 800; }
 .pro-text p { margin: 2px 0 0 0; font-size: 0.8rem; color: #D4982A; font-weight: 600; }
 .pro-arrow { font-size: 1.5rem; color: #E5A93B; font-weight: bold; }
+
+/* Push the whole page down to clear the phone's top notch/status bar */
+body {
+    padding-top: env(safe-area-inset-top, 24px) !important;
+}
