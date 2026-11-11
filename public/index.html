@@ -152,10 +152,35 @@
   <button type="button" class="glass-nav__item" onclick="document.getElementById('cartToggleBtn')?.click()">
     <span class="glass-nav__icon">🛒</span><span class="glass-nav__label">Cart</span>
   </button>
-  <a href="auth.html" class="glass-nav__item">
-    <span class="glass-nav__icon">👤</span><span class="glass-nav__label">Sign In</span>
+  <a href="auth.html" class="glass-nav__item" id="glassAccountItem">
+    <span class="glass-nav__icon">👤</span><span class="glass-nav__label" id="glassAccountLabel">Sign In</span>
   </a>
 </nav>
+
+
+<!-- Auth-aware glass nav -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script>
+(async () => {
+  const item  = document.getElementById('glassAccountItem');
+  const label = document.getElementById('glassAccountLabel');
+  if (!item || !label) return;
+  try {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session) {
+      item.href = 'profile.html';
+      label.textContent = 'Profile';
+      item.querySelector('.glass-nav__icon').textContent = '👤';
+    } else {
+      item.href = 'auth.html';
+      label.textContent = 'Sign In';
+    }
+  } catch (e) {
+    console.warn('auth check failed', e);
+  }
+})();
+</script>
 
 </body>
 </html>
