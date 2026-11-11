@@ -7,7 +7,7 @@ let gpsMarker = null;
 
 window.switchTab = function(tabId, btnElement) {
     document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.dash-nav-item, .nav-item').forEach(el => el.classList.remove('active'));
     document.getElementById(`tab-${tabId}`).classList.add('active');
     if (btnElement) btnElement.classList.add('active');
 

@@ -86,13 +86,13 @@
       /* ===== Floating liquid-glass top nav for dashboard ===== */
       .dash-glass-nav {
         position: fixed;
-        top: calc(env(safe-area-inset-top, 0px) + 12px);
+        top: calc(env(safe-area-inset-top, 0px) + 28px);
         left: 50%;
         transform: translateX(-50%);
         z-index: 1000;
         width: min(96vw, 900px);
         border-radius: 999px;
-        background: rgba(15, 23, 42, 0.55);
+        background: rgba(0, 0, 0, 0.62);
         -webkit-backdrop-filter: blur(20px) saturate(180%);
         backdrop-filter: blur(20px) saturate(180%);
         border: 1px solid rgba(255, 255, 255, 0.18);
@@ -147,13 +147,13 @@
       /* Push the main content down so the floating bar doesn't cover it */
       body { padding-top: 0; }
       .main-content {
-        padding-top: calc(env(safe-area-inset-top, 0px) + 92px) !important;
+        padding-top: calc(env(safe-area-inset-top, 0px) + 108px) !important;
       }
 
       /* Kill the mobile media-query rule that used to make .sidebar horizontal */
       @media (max-width: 900px) {
         .main-content {
-          padding-top: calc(env(safe-area-inset-top, 0px) + 96px) !important;
+          padding-top: calc(env(safe-area-inset-top, 0px) + 112px) !important;
         }
       }
     </style>
