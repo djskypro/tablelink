@@ -66,6 +66,14 @@
         </div>
     </div>
 
+
+        <!-- SIGN OUT CARD -->
+        <div class="profile-card" style="text-align: left;">
+            <h4>🚪 Session</h4>
+            <p>Sign out of your TABLELINK account on this device.</p>
+            <button id="signOutBtn" class="delete-link" style="border-color:#64748B; color:#64748B;">Sign Out</button>
+        </div>
+
     <!-- 1. WALLET MODAL (Opens first) -->
     <div class="modal-overlay" id="walletModal">
         <div class="modal-box">
@@ -116,5 +124,18 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="profile.js?v=4002"></script>
+
+<script>
+document.getElementById('signOutBtn')?.addEventListener('click', async () => {
+  if (!confirm('Sign out of TABLELINK?')) return;
+  try {
+    await supabaseClient.auth.signOut();
+  } catch (e) {
+    console.warn('signOut failed', e);
+  }
+  location.href = 'index.html';
+});
+</script>
+
 </body>
 </html>
