@@ -253,3 +253,8 @@ body { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 96px); }
   }
   .glass-nav__item { color: #f1f5f9; }
 }
+
+/* Hide the old floating buttons since they are now in the glass nav */
+.float-btn {
+    display: none !important;
+}

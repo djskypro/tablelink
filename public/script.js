@@ -359,3 +359,14 @@ async function checkProStatus() {
 document.addEventListener('DOMContentLoaded', () => {
     checkProStatus();
 });
+
+// Show Book & Cart in nav ONLY if we are inside a restaurant (website mode)
+document.addEventListener('DOMContentLoaded', () => {
+    const isRestaurantMode = new URLSearchParams(window.location.search).has('restaurant');
+    if (isRestaurantMode) {
+        const navBook = document.getElementById('navBookBtn');
+        const navCart = document.getElementById('navCartBtn');
+        if (navBook) navBook.style.display = 'flex';
+        if (navCart) navCart.style.display = 'flex';
+    }
+});

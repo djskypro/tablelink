@@ -146,11 +146,11 @@
   <a href="index.html" class="glass-nav__item">
     <span class="glass-nav__icon">🏠</span><span class="glass-nav__label">Home</span>
   </a>
-  <button type="button" class="glass-nav__item" onclick="document.getElementById('bookTableBtn')?.click()">
+  <button type="button" class="glass-nav__item" id="navBookBtn" style="display: none;" onclick="document.getElementById('bookTableBtn')?.click()">
     <span class="glass-nav__icon">📅</span><span class="glass-nav__label">Book</span>
   </button>
-  <button type="button" class="glass-nav__item" onclick="document.getElementById('cartToggleBtn')?.click()">
-    <span class="glass-nav__icon">🛒</span><span class="glass-nav__label">Cart</span>
+  <button type="button" class="glass-nav__item" id="navCartBtn" style="display: none;" onclick="document.getElementById('cartToggleBtn')?.click()">
+    <span class="glass-nav__icon" style="position: relative;">🛒<span id="cartBadge" class="badge" style="display: none; position: absolute; top: -5px; right: -12px; background: #e85d04; color: white; font-size: 10px; padding: 2px 6px; border-radius: 50%; font-weight: bold;">0</span></span><span class="glass-nav__label">Cart</span>
   </button>
   <a href="auth.html" class="glass-nav__item" id="glassAccountItem">
     <span class="glass-nav__icon">👤</span><span class="glass-nav__label" id="glassAccountLabel">Sign In</span>
