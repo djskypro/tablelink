@@ -169,7 +169,8 @@
   try {
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (session) {
-      item.href = 'profile.html';
+      const _rq = new URLSearchParams(location.search).get('restaurant');
+      item.href = 'profile.html' + (_rq ? '?restaurant=' + encodeURIComponent(_rq) : '');
       label.textContent = 'Profile';
       item.querySelector('.glass-nav__icon').textContent = '👤';
     } else {

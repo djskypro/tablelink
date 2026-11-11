@@ -45,7 +45,7 @@
 <body>
 
     <div class="page-header">
-        <a href="index.html" class="back-btn">← Back</a>
+        <a href="index.html" class="back-btn" id="profileBackBtn">← Back</a>
         <h2>My Profile</h2>
         <div style="width: 60px;"></div>
     </div>
@@ -134,6 +134,15 @@ document.getElementById('signOutBtn')?.addEventListener('click', async () => {
     console.warn('signOut failed', e);
   }
   location.href = 'index.html';
+});
+</script>
+
+
+<script>
+document.getElementById('profileBackBtn')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  const rq = new URLSearchParams(location.search).get('restaurant');
+  location.href = rq ? ('index.html?restaurant=' + encodeURIComponent(rq)) : 'index.html';
 });
 </script>
 
