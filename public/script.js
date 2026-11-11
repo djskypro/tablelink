@@ -45,6 +45,13 @@ function renderCart() {
     const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
     if (cartBadge) cartBadge.textContent = totalItems;
     if (cartBadge) cartBadge.style.display = totalItems > 0 ? 'flex' : 'none';
+    
+    // NEW: Show the cart button in the glass nav if there are items OR if in restaurant mode
+    const navCartBtn = document.getElementById('navCartBtn');
+    if (navCartBtn) {
+        const isRest = new URLSearchParams(window.location.search).has('restaurant');
+        navCartBtn.style.display = (totalItems > 0 || isRest) ? 'flex' : 'none';
+    }
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p style="color:var(--text-muted);text-align:center;margin-top:20px;">Your cart is empty.</p>';
         cartTotalAmount.textContent = 'UGX 0'; return;
