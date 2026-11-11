@@ -81,21 +81,102 @@
             .btn-accept, .btn-reject { width: auto; flex: 1; }
         }
     </style>
+
+    <style id="dash-glass-css">
+      /* ===== Floating liquid-glass top nav for dashboard ===== */
+      .dash-glass-nav {
+        position: fixed;
+        top: calc(env(safe-area-inset-top, 0px) + 12px);
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        width: min(96vw, 900px);
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.55);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow:
+          0 10px 30px rgba(0,0,0,0.35),
+          inset 0 1px 1px rgba(255,255,255,0.25),
+          inset 0 -1px 1px rgba(255,255,255,0.06);
+        overflow: hidden;
+      }
+      .dash-glass-nav__scroll {
+        display: flex;
+        align-items: stretch;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 6px;
+        gap: 4px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .dash-glass-nav__scroll::-webkit-scrollbar { display: none; }
+
+      .dash-nav-item {
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        min-width: 68px;
+        padding: 8px 10px;
+        border: none;
+        background: transparent;
+        color: #cbd5e1;
+        font-family: inherit;
+        font-weight: 600;
+        font-size: 0.72rem;
+        line-height: 1.1;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s, transform 0.15s;
+        white-space: nowrap;
+      }
+      .dash-nav-item:active { transform: scale(0.95); }
+      .dash-nav-item.active {
+        background: rgba(232, 93, 4, 0.9);
+        color: #fff;
+      }
+      .dash-nav-icon { font-size: 1.05rem; line-height: 1; }
+      .dash-nav-label { font-size: 0.68rem; }
+
+      /* Push the main content down so the floating bar doesn't cover it */
+      body { padding-top: 0; }
+      .main-content {
+        padding-top: calc(env(safe-area-inset-top, 0px) + 92px) !important;
+      }
+
+      /* Kill the mobile media-query rule that used to make .sidebar horizontal */
+      @media (max-width: 900px) {
+        .main-content {
+          padding-top: calc(env(safe-area-inset-top, 0px) + 96px) !important;
+        }
+      }
+    </style>
+
 </head>
 <body>
-    <aside class="sidebar">
-        <a href="index.html" class="brand">🍽️ TABLELINK</a>
-        <button class="nav-item active" onclick="switchTab('overview', this)">📊 Overview</button>
-        <button class="nav-item" onclick="switchTab('orders', this)">🛎️ Live Orders</button>
-        <button class="nav-item" onclick="switchTab('scanner', this)">📷 Scan</button>
-        <button class="nav-item" onclick="switchTab('requests', this)">🔔 Requests</button>
-        <button class="nav-item" onclick="switchTab('reservations', this)">📅 Bookings</button>
-        <button class="nav-item" onclick="switchTab('menu', this)">🍔 Menu</button>
-        <button class="nav-item" onclick="switchTab('analytics', this)">📈 Analytics</button>
-        <button class="nav-item" onclick="switchTab('reviews', this)">⭐ Reviews</button>
-        <button class="nav-item" onclick="switchTab('qrcode', this)">📱 QR Code</button>
-        <button class="nav-item" id="update-gps-btn" style="color: #38bdf8; margin-top: auto;">📍 Update GPS</button>
-    </aside>
+    
+    <!-- Floating liquid-glass top nav -->
+    <nav class="dash-glass-nav" aria-label="Dashboard navigation">
+      <div class="dash-glass-nav__scroll">
+        <button class="dash-nav-item active" onclick="switchTab('overview', this)"><span class="dash-nav-icon">📊</span><span class="dash-nav-label">Overview</span></button>
+        <button class="dash-nav-item" onclick="switchTab('orders', this)"><span class="dash-nav-icon">🛎️</span><span class="dash-nav-label">Orders</span></button>
+        <button class="dash-nav-item" onclick="switchTab('scanner', this)"><span class="dash-nav-icon">📷</span><span class="dash-nav-label">Scan</span></button>
+        <button class="dash-nav-item" onclick="switchTab('requests', this)"><span class="dash-nav-icon">🔔</span><span class="dash-nav-label">Requests</span></button>
+        <button class="dash-nav-item" onclick="switchTab('reservations', this)"><span class="dash-nav-icon">📅</span><span class="dash-nav-label">Bookings</span></button>
+        <button class="dash-nav-item" onclick="switchTab('menu', this)"><span class="dash-nav-icon">🍔</span><span class="dash-nav-label">Menu</span></button>
+        <button class="dash-nav-item" onclick="switchTab('analytics', this)"><span class="dash-nav-icon">📈</span><span class="dash-nav-label">Analytics</span></button>
+        <button class="dash-nav-item" onclick="switchTab('reviews', this)"><span class="dash-nav-icon">⭐</span><span class="dash-nav-label">Reviews</span></button>
+        <button class="dash-nav-item" onclick="switchTab('qrcode', this)"><span class="dash-nav-icon">📱</span><span class="dash-nav-label">QR Code</span></button>
+        <button class="dash-nav-item" id="update-gps-btn" onclick="if(window.updateGPS) window.updateGPS()"><span class="dash-nav-icon">📍</span><span class="dash-nav-label">GPS</span></button>
+      </div>
+    </nav>
+
 
     <main class="main-content">
         <div class="top-bar">
