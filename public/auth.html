@@ -86,7 +86,7 @@
             // If Supabase returns a session immediately, we're logged in
             if (data.session) {
                 setMsg('✅ Signed up & logged in! Redirecting...', 'success');
-                setTimeout(() => window.location.href = 'index.html', 1000);
+                setTimeout(() => { const r = localStorage.getItem('redirectAfterLogin'); localStorage.removeItem('redirectAfterLogin'); window.location.href = r || 'index.html'; }, 1000);
             } else {
                 setMsg('Sign up OK! Now tap Login below with the same email and password.', 'success');
             }
@@ -110,7 +110,7 @@
             }
 
             setMsg('✅ Login OK! Redirecting to TABLELINK...', 'success');
-            setTimeout(() => window.location.href = 'index.html', 1000);
+            setTimeout(() => { const r = localStorage.getItem('redirectAfterLogin'); localStorage.removeItem('redirectAfterLogin'); window.location.href = r || 'index.html'; }, 1000);
         };
 
         $('logout').onclick = async () => {

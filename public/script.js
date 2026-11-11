@@ -193,7 +193,7 @@ if (submitRatingBtn) {
     submitRatingBtn.addEventListener('click', async () => {
         if (selectedRating === 0) return alert("Please tap a star to rate!");
         const { data: { session } } = await supabaseClient.auth.getSession();
-        if (!session) { alert("Please log in to rate this dish."); window.location.href = 'auth.html'; return; }
+        if (!session) { alert("Please log in to rate this dish."); localStorage.setItem('redirectAfterLogin', window.location.href); window.location.href = 'auth.html'; return; }
         submitRatingBtn.textContent = "Submitting..."; submitRatingBtn.disabled = true;
         const textEl = document.getElementById('reviewText'); const text = textEl ? textEl.value.trim() : '';
         const { error } = await supabaseClient.from('menu_item_reviews').upsert([{ menu_item_id: window.currentRatingId, customer_id: session.user.id, rating: selectedRating, review_text: text }], { onConflict: 'menu_item_id, customer_id' });
@@ -261,7 +261,7 @@ if (submitReservationBtn) {
         const date = dateEl ? dateEl.value : ''; const time = timeEl ? timeEl.value : ''; const partySize = partyEl ? partyEl.value : ''; const requests = reqEl ? reqEl.value : '';
         if (!restaurantId || !date || !time || !partySize) return alert("Please fill in all the required fields.");
         const { data: { session } } = await supabaseClient.auth.getSession();
-        if (!session) { alert("Please log in to book a table."); window.location.href = 'auth.html'; return; }
+        if (!session) { alert("Please log in to book a table."); localStorage.setItem('redirectAfterLogin', window.location.href); window.location.href = 'auth.html'; return; }
         submitReservationBtn.textContent = "Booking..."; submitReservationBtn.disabled = true;
         const { error } = await supabaseClient.from('reservations').insert([{ restaurant_id: restaurantId, customer_id: session.user.id, reservation_date: date, reservation_time: time, party_size: parseInt(partySize), special_requests: requests, status: 'pending' }]);
         if (error) alert("Error booking table: " + error.message);
@@ -277,7 +277,7 @@ if (checkoutBtn) {
         if (cart.length === 0) return alert("Your cart is empty!");
         const originalText = checkoutBtn.textContent; checkoutBtn.textContent = "Processing..."; checkoutBtn.disabled = true;
         const { data: { session } } = await supabaseClient.auth.getSession();
-        if (!session) { alert("Please log in to place an order."); window.location.href = 'auth.html'; return; }
+        if (!session) { alert("Please log in to place an order."); localStorage.setItem('redirectAfterLogin', window.location.href); window.location.href = 'auth.html'; return; }
         let custLat = null, custLng = null;
         try { const pos = await new Promise((resolve, reject) => { navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 }); }); custLat = pos.coords.latitude; custLng = pos.coords.longitude; } catch (e) { console.log("Location denied."); }
         let targetRestId = restIdFromUrl;
