@@ -2,22 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TABLELINK — Premium Eats</title>
     <link rel="stylesheet" href="style.css?v=9999">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="brand">TABLELINK</a>
-            <nav class="nav-links">
-                <a href="auth.html" class="btn-outline">Sign In</a>
-            </nav>
-        </div>
-    </header>
-
     <section class="hero">
         <div class="hero-content">
             <span class="badge">Kampala's Finest</span>
@@ -149,5 +140,22 @@
     <script src="supabase-config.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="script.js?v=9999"></script>
+
+<!-- Floating liquid-glass bottom nav -->
+<nav class="glass-nav" aria-label="Main navigation">
+  <a href="index.html" class="glass-nav__item">
+    <span class="glass-nav__icon">🏠</span><span class="glass-nav__label">Home</span>
+  </a>
+  <button type="button" class="glass-nav__item" onclick="document.getElementById('bookTableBtn')?.click()">
+    <span class="glass-nav__icon">📅</span><span class="glass-nav__label">Book</span>
+  </button>
+  <button type="button" class="glass-nav__item" onclick="document.getElementById('cartToggleBtn')?.click()">
+    <span class="glass-nav__icon">🛒</span><span class="glass-nav__label">Cart</span>
+  </button>
+  <a href="auth.html" class="glass-nav__item">
+    <span class="glass-nav__icon">👤</span><span class="glass-nav__label">Sign In</span>
+  </a>
+</nav>
+
 </body>
 </html>
