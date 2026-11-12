@@ -170,3 +170,32 @@ window.clearRestaurant = async function(id, name) {
     }
     location.reload();
 };
+
+// Clear all orders/analytics
+document.addEventListener('DOMContentLoaded', () => {
+    const resetBtn = document.getElementById('resetAnalyticsBtn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', async () => {
+            if (!confirm("⚠️ WARNING: Are you sure you want to delete ALL orders, revenue, and top dish data? This cannot be undone.")) return;
+            
+            resetBtn.textContent = "Clearing...";
+            resetBtn.disabled = true;
+
+            // Delete all rows from the orders table
+            // We use .neq('id', '00000000-0000-0000-0000-000000000000') because Supabase requires a filter to delete multiple rows
+            const { error } = await supabaseClient
+                .from('orders')
+                .delete()
+                .neq('id', '00000000-0000-0000-0000-000000000000');
+
+            if (error) {
+                alert("Error clearing stats: " + error.message);
+                resetBtn.textContent = "🗑️ Reset Stats";
+                resetBtn.disabled = false;
+            } else {
+                alert("✅ All analytics and order data cleared.");
+                location.reload();
+            }
+        });
+    }
+});
