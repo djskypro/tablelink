@@ -75,18 +75,18 @@
         <div class="stats-grid">
             <div class="stat-card"><h3>Total Restaurants</h3><div class="value" id="stat-restaurants">0</div></div>
             <div class="stat-card"><h3>Total Orders</h3><div class="value" id="stat-orders">0</div></div>
-            <div class="stat-card"><h3>Total Revenue</h3><div class="value" id="stat-revenue">UGX 0</div></div>
+            <div class="stat-card"><h3>Total Revenue <button onclick="clearRevenue()" style="background:#DC2626;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;font-size:0.7rem;margin-left:10px;">🗑️ Clear</button></h3><div class="value" id="stat-revenue">UGX 0</div></div>
             <div class="stat-card"><h3>Total Users</h3><div class="value" id="stat-users">0</div></div>
         </div>
 
         <!-- DEEP DATA PANELS -->
         <div class="data-layout">
             <div class="panel-card">
-                <h3>🔥 Top 5 Selling Dishes</h3>
+                <h3>🔥 Top 5 Selling Dishes <button onclick="clearTopDishes()" style="background:#DC2626;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;font-size:0.7rem;margin-left:10px;">🗑️ Clear</button></h3>
                 <div id="topDishesList"><p style="color: #64748b;">Loading...</p></div>
             </div>
             <div class="panel-card">
-                <h3>💰 Top Restaurants (Revenue)</h3>
+                <h3>💰 Top Restaurants (Revenue) <button onclick="clearTopRestaurants()" style="background:#DC2626;color:white;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;font-size:0.7rem;margin-left:10px;">🗑️ Clear</button></h3>
                 <div id="topRestaurantsList"><p style="color: #64748b;">Loading...</p></div>
             </div>
         </div>

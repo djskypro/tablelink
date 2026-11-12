@@ -199,3 +199,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// ====== INDIVIDUAL CLEAR FUNCTIONS ======
+
+window.clearRevenue = async function() {
+    if (!confirm("Clear Total Revenue? This will delete all completed orders.")) return;
+    
+    // We delete from 'orders' where status is 'completed' (or just all orders)
+    const { error } = await supabaseClient.from('orders').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    
+    if (error) alert("❌ Error: " + error.message + "\n\nYou likely need to turn off Row Level Security (RLS) for the 'orders' table in Supabase to allow deletes.");
+    else { alert("✅ Revenue data cleared!"); location.reload(); }
+};
+
+window.clearTopRestaurants = async function() {
+    if (!confirm("Clear Top Restaurants? This deletes all order history so the ranking resets.")) return;
+    
+    const { error } = await supabaseClient.from('orders').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    
+    if (error) alert("❌ Error: " + error.message);
+    else { alert("✅ Restaurant rankings reset!"); location.reload(); }
+};
+
+window.clearTopDishes = async function() {
+    if (!confirm("Clear Top Selling Dishes? This deletes the order items.")) return;
+    
+    // Most dish stats are stored in 'order_items' or similar. If you don't have this table, it will clear 'orders'
+    const { error } = await supabaseClient.from('orders').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    
+    if (error) alert("❌ Error: " + error.message);
+    else { alert("✅ Dish data cleared!"); location.reload(); }
+};
