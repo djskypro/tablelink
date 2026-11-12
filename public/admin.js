@@ -114,6 +114,10 @@ function renderTable() {
                 </td>
                 
                 <td><span class="device-badge">${deviceCount} / ${maxDevices}</span></td>
+            
+                <td>
+                    <button onclick="clearRestaurant('${rest.id}', '${rest.name.replace(/'/g, "\'")}')" style="background:#DC2626;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:0.8rem;font-weight:bold;">🗑️ Clear</button>
+                </td>
             </tr>
         `;
     });
@@ -150,3 +154,19 @@ window.updateSubscriptionTier = async function(id, tier) {
 };
 
 initAdmin();
+
+window.clearRestaurant = async function(id, name) {
+    if (!confirm("⚠️ Are you sure you want to permanently clear " + name + "?")) return;
+    
+    // Try to delete completely
+    const { error } = await supabaseClient.from('restaurants').delete().eq('id', id);
+    
+    if (error) {
+        // If Supabase blocks the delete due to foreign keys (orders, menus, etc.), hide it instead
+        alert("Restaurant has connected data (orders/menus). Hiding it from the app instead.");
+        await supabaseClient.from('restaurants').update({ is_active: false, is_visible: false }).eq('id', id);
+    } else {
+        alert(name + " has been cleared.");
+    }
+    location.reload();
+};
