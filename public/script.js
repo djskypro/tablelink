@@ -241,14 +241,14 @@ if (bookTableBtn && reservationModal) {
             select.style.display = 'none'; 
             const dd = document.getElementById('resDropdownLabel'); if(dd) dd.style.display = 'none'; 
             const ld = document.getElementById('lockedRestaurantDisplay'); if(ld) ld.style.display = 'block';
-            const { data } = await supabaseClient.from('restaurants').select('name').eq('id', restIdFromUrl).single();
+            const { data } = await supabaseClient.from('restaurants').select('name').eq('id', restIdFromUrl).eq('is_active', true).eq('is_visible', true).single();
             if (data) { const ln = document.getElementById('lockedRestaurantName'); if(ln) ln.textContent = data.name; }
         } else {
             select.style.display = 'block'; 
             const dd = document.getElementById('resDropdownLabel'); if(dd) dd.style.display = 'block'; 
             const ld = document.getElementById('lockedRestaurantDisplay'); if(ld) ld.style.display = 'none';
             select.innerHTML = '<option value="">Loading...</option>';
-            const { data, error } = await supabaseClient.from('restaurants').select('id, name, location').eq('is_active', true);
+            const { data, error } = await supabaseClient.from('restaurants').select('id, name, location').eq('is_active', true).eq('is_visible', true);
             if (error || !data || data.length === 0) { select.innerHTML = '<option value="">No restaurants available</option>'; return; }
             select.innerHTML = '<option value="">Select a restaurant...</option>';
             data.forEach(rest => { select.innerHTML += `<option value="${rest.id}">${rest.name} (${rest.location})</option>`; });
