@@ -86,12 +86,12 @@ function renderTable() {
         const maxDevices = tier === 'free' ? 1 : tier === 'vip' ? 2 : 5;
 
         tbody.innerHTML += `
-            <tr>
+            <tr data-id="${rest.id}">
                 <td><strong>${rest.name}</strong><br><span style="font-size:0.75rem; color:#94a3b8;">${rest.cuisine}</span></td>
                 
                 <td>
                     <label class="switch">
-                        <input type="checkbox" ${activeChecked} onchange="toggleRestaurantStatus('${rest.id}', this.checked)">
+                        <input type="checkbox" ${activeChecked} class="toggle-active">
                         <span class="slider"></span>
                     </label>
                     <span class="status-text" style="color: ${isActive ? '#10b981' : '#ef4444'};">${isActive ? 'LIVE' : 'SUSPENDED'}</span>
@@ -99,7 +99,7 @@ function renderTable() {
 
                 <td>
                     <label class="switch">
-                        <input type="checkbox" ${visibleChecked} onchange="toggleRestaurantVisibility('${rest.id}', this.checked)">
+                        <input type="checkbox" ${visibleChecked} class="toggle-visible">
                         <span class="slider"></span>
                     </label>
                     <span class="status-text" style="color: ${isVisible ? '#10b981' : '#ef4444'};">${isVisible ? 'VISIBLE' : 'HIDDEN'}</span>
@@ -233,4 +233,49 @@ window.clearTopDishes = async function() {
     
     if (error) alert("❌ Error: " + error.message);
     else { alert("✅ Dish data cleared!"); location.reload(); }
+};
+
+window.saveAllAdminChanges = async function() {
+    const btn = document.getElementById('saveAdminBtn');
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
+
+    const rows = document.querySelectorAll('#restaurantsTableBody tr[data-id]');
+    let successCount = 0;
+    let failCount = 0;
+
+    for (const row of rows) {
+        const id = row.getAttribute('data-id');
+        const isActive = row.querySelector('.toggle-active').checked;
+        const isVisible = row.querySelector('.toggle-visible').checked;
+        const tier = row.querySelector('.tier-select').value;
+
+        const { data, error } = await supabaseClient
+            .from('restaurants')
+            .update({ 
+                is_active: isActive, 
+                is_visible: isVisible,
+                subscription_tier: tier
+            })
+            .eq('id', id)
+            .select();
+
+        if (error || (data && data.length === 0)) {
+            failCount++;
+            console.error('Failed to update', id, error);
+        } else {
+            successCount++;
+        }
+    }
+
+    btn.textContent = '💾 Save Changes';
+    btn.disabled = false;
+
+    if (failCount > 0) {
+        alert(`⚠️ Saved ${successCount} changes. But ${failCount} failed.\n\nYou need to add the UPDATE policy in Supabase (check previous messages for the SQL).`);
+    } else {
+        alert(`✅ All ${successCount} changes saved successfully!`);
+    }
+    
+    location.reload();
 };
