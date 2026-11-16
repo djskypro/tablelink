@@ -377,3 +377,35 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navCart) navCart.style.display = 'flex';
     }
 });
+
+// ===== AUTO-REDIRECT BASED ON ROLE =====
+document.addEventListener('DOMContentLoaded', async () => {
+    // Only redirect if on the main homepage AND not opening a specific restaurant QR
+    const isHomepage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
+    const isRestaurantMode = window.location.search.includes('restaurant=');
+
+    if (!isHomepage || isRestaurantMode || typeof supabaseClient === 'undefined') return;
+
+    try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) return; // Not logged in, stay on customer page
+
+        // 1. Check if Admin
+        const { data: profile } = await supabaseClient.from('profiles').select('role').eq('id', session.user.id).single();
+        if (profile && profile.role === 'admin') {
+            window.location.href = 'admin.html';
+            return;
+        }
+
+        // 2. Check if Restaurant Owner
+        const { data: restaurants } = await supabaseClient.from('restaurants').select('id').eq('owner_id', session.user.id).limit(1);
+        if (restaurants && restaurants.length > 0) {
+            window.location.href = 'dashboard.html';
+            return;
+        }
+
+        // 3. Normal customer -> stay on index.html
+    } catch (err) {
+        console.warn("Auto-redirect check failed:", err);
+    }
+});
