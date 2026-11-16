@@ -30,7 +30,7 @@
     <div class="portal-card">
         <h1>🍽️ Restaurant Portal</h1>
         <!-- TOP APP DOWNLOAD BANNER -->
-        <div style="background: #0f172a; padding: 15px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(15,23,42,0.2);">
+        <div id="appDownloadBanner" style="background: #0f172a; padding: 15px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(15,23,42,0.2);">
             <div style="text-align: left;">
                 <h4 style="margin: 0; color: white; font-size: 0.95rem;">Get the App</h4>
                 <p style="margin: 0; color: #94a3b8; font-size: 0.75rem;">Manage orders on the go</p>
@@ -109,5 +109,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="restaurant-auth.js?v=16"></script>
+
+    <script>
+        // Detect if the user is inside a WebView (APK) or a normal browser
+        // Most APKs inject "wv" or specific app identifiers into the user agent.
+        const isApp = /wv|Capacitor|Cordova|WebView|TablelinkApp/i.test(navigator.userAgent) 
+                      || window.matchMedia('(display-mode: standalone)').matches;
+
+        if (isApp) {
+            // If they are already in the app, hide the download banner completely
+            const banner = document.getElementById('appDownloadBanner');
+            if (banner) {
+                banner.style.display = 'none';
+            }
+        }
+    </script>
+
 </body>
 </html>
