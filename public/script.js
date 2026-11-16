@@ -381,8 +381,15 @@ document.addEventListener('DOMContentLoaded', () => {
 // ===== AUTO-REDIRECT BASED ON ROLE =====
 document.addEventListener('DOMContentLoaded', async () => {
     // Only redirect if on the main homepage AND not opening a specific restaurant QR
-    const isHomepage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
+    const isHomepage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname === '';
     const isRestaurantMode = window.location.search.includes('restaurant=');
+    
+    // Check if we just logged out (prevents the loop!)
+    const justLoggedOut = sessionStorage.getItem('justLoggedOut') === 'true';
+    if (justLoggedOut) {
+        sessionStorage.removeItem('justLoggedOut');
+        return; 
+    }
 
     if (!isHomepage || isRestaurantMode || typeof supabaseClient === 'undefined') return;
 
@@ -403,8 +410,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.location.href = 'dashboard.html';
             return;
         }
-
-        // 3. Normal customer -> stay on index.html
     } catch (err) {
         console.warn("Auto-redirect check failed:", err);
     }

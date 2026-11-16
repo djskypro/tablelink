@@ -129,6 +129,7 @@
 document.getElementById('signOutBtn')?.addEventListener('click', async () => {
   if (!confirm('Sign out of TABLELINK?')) return;
   try {
+    sessionStorage.setItem('justLoggedOut', 'true');
     await supabaseClient.auth.signOut();
   } catch (e) {
     console.warn('signOut failed', e);
