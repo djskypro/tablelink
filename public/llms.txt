@@ -1,0 +1,14 @@
+# TABLELINK
+
+> TABLELINK is a free restaurant technology platform based in Kampala, Uganda. It allows customers to scan QR codes, skip the wait, pre-order meals, and share tables. Restaurant owners use the TABLELINK dashboard to manage live orders, tables, and analytics.
+
+## Features
+- QR Code Ordering: Customers scan a code at their table to see the menu and order instantly.
+- Live Dashboard: Restaurant owners track incoming orders in real-time.
+- Table Reservations: Customers can book tables ahead of time.
+- Group Dining: Allows users to split bills and share tables.
+- Free for Restaurants: The platform is free for restaurant partners to use.
+
+## Links
+- [Website Home](https://tablelink-1kk.pages.dev)
+- [Download Android App](https://tablelink-1kk.pages.dev/tablelink.apk)
