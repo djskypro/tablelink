@@ -43,6 +43,12 @@
         
 
         <!-- LOGIN FORM -->
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchAuthTab('login')">Partner Login</div>
+            <div class="tab" onclick="switchAuthTab('register')">Create Account</div>
+        </div>
+
         <div id="login-section" class="form-section active">
             <form id="login-form">
                 <div class="form-group">
@@ -54,11 +60,7 @@
                     <input type="password" id="login-password" required placeholder="••••••••">
                 </div>
                 <button type="submit" class="btn-submit" id="login-btn">Log In to Dashboard</button>
-            <div style="text-align: center; margin-top: 15px;">
-                <a href="tablelink.apk" download style="color: #64748b; font-size: 0.85rem; text-decoration: underline;">
-                    📱 Don't have the app? Download it here
-                </a>
-            </div>
+            
 
                 <p id="login-error" class="error-msg"></p>
             </form>
