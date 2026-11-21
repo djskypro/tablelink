@@ -333,15 +333,21 @@ window.deleteMenuItem = async function(id) {
 async function fetchAnalytics() {
     const container = document.getElementById('analyticsContent');
     container.style.display = 'block';
-    const { data: orders, error } = await supabaseClient.from('orders').select('created_at, total_ugx, order_items(quantity, menu_items(name))').eq('restaurant_id', myRestaurant.id);
+    const { data: orders, error } = await supabaseClient.from('orders').select('created_at, total_ugx, status, order_items(quantity, menu_items(name))').eq('restaurant_id', myRestaurant.id);
     if (error) { console.error(error); return; }
     let totalRevenue = 0; let todayRevenue = 0; let todayOrders = 0; let dishSales = {};
     const todayStr = new Date().toDateString();
     orders.forEach(order => {
-        totalRevenue += order.total_ugx;
-        const orderDate = new Date(order.created_at).toDateString();
-        if (orderDate === todayStr) { todayRevenue += order.total_ugx; todayOrders++; }
-        if (order.order_items) { order.order_items.forEach(item => { const dishName = item.menu_items?.name || 'Unknown Dish'; dishSales[dishName] = (dishSales[dishName] || 0) + item.quantity; }); }
+        // Only count revenue if the order is accepted, preparing, ready, or completed
+        const validStatuses = ['accepted', 'preparing', 'ready', 'completed', 'delivered'];
+        const status = (order.status || 'pending').toLowerCase();
+        
+        if (validStatuses.includes(status)) {
+            totalRevenue += order.total_ugx;
+            const orderDate = new Date(order.created_at).toDateString();
+            if (orderDate === todayStr) { todayRevenue += order.total_ugx; todayOrders++; }
+            if (order.order_items) { order.order_items.forEach(item => { const dishName = item.menu_items?.name || 'Unknown Dish'; dishSales[dishName] = (dishSales[dishName] || 0) + item.quantity; }); }
+        }
     });
     document.getElementById('analytics-today-orders').textContent = todayOrders;
     document.getElementById('analytics-today-revenue').textContent = `UGX ${todayRevenue.toLocaleString()}`;
@@ -533,3 +539,8 @@ window.manualRefreshOrders = async function() {
         btn.disabled = false;
     }, 1000);
 };
+
+function isValidOrderForRevenue(status) {
+    // Only count orders that were actually accepted or completed
+    return ['accepted', 'preparing', 'ready', 'completed', 'delivered'].includes(status);
+}
