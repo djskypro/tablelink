@@ -335,6 +335,15 @@ async function fetchAnalytics() {
     container.style.display = 'block';
     const { data: orders, error } = await supabaseClient.from('orders').select('created_at, total_ugx, status, order_items(quantity, menu_items(name))').eq('restaurant_id', myRestaurant.id);
     if (error) { console.error(error); return; }
+    
+    // DIAGNOSTIC: Show us what the database is actually returning
+    if (orders && orders.length > 0) {
+        const sample = orders.slice(0, 3).map(o => `Order: ${o.total_ugx} | Status: "${o.status}"`).join('\n');
+        alert("Database says:\n" + sample);
+    } else {
+        alert("No orders found in the database.");
+    }
+
     let totalRevenue = 0; let todayRevenue = 0; let todayOrders = 0; let dishSales = {};
     const todayStr = new Date().toDateString();
     orders.forEach(order => {
