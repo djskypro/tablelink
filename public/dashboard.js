@@ -224,7 +224,10 @@ async function fetchOrders() {
     let revenue = 0; let activeCount = 0;
     if (!data || data.length === 0) container.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding:40px;">No orders yet.</p>';
     data?.forEach(order => {
-        revenue += order.total_ugx; if (order.status === 'pending') activeCount++;
+        const validStatuses = ['accepted', 'preparing', 'ready', 'completed', 'delivered'];
+        if (validStatuses.includes((order.status || '').toLowerCase())) {
+            revenue += order.total_ugx;
+        } if (order.status === 'pending') activeCount++;
         const time = new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         let itemsList = order.order_items.map(i => `${i.quantity}x ${i.menu_items?.name || 'Item'}`).join(', ');
         const mapBtnHtml = order.customer_latitude ? `<button style="background:#38bdf8; color:white; border:none; padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer; margin-top:10px; font-size:0.85rem;" onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${order.customer_latitude},${order.customer_longitude}', '_blank')">📍 View Customer Location</button>` : '';
