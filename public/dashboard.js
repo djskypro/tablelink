@@ -244,8 +244,20 @@ window.setPrepTime = async function(orderId, mins) {
     fetchOrders();
 };
 
+let orderChannel = null;
 function listenToNewOrders() {
-    supabaseClient.channel('order-changes').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'orders', filter: `restaurant_id=eq.${myRestaurant.id}` }, () => fetchOrders()).subscribe();
+    if (orderChannel) supabaseClient.removeChannel(orderChannel);
+    
+    orderChannel = supabaseClient.channel('order-changes-' + Date.now())
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'orders', filter: `restaurant_id=eq.${myRestaurant.id}` }, (payload) => {
+            console.log('New Order Received!', payload);
+            fetchOrders(); // Reload the list instantly
+            // Play a sound
+            try { new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3').play(); } catch(e) {}
+        })
+        .subscribe((status) => {
+            console.log('Realtime status:', status);
+        });
 }
 
 window.updateOrderStatus = async function(orderId, newStatus) {
