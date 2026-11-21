@@ -154,6 +154,14 @@
   <button type="button" class="glass-nav__item" id="navBookBtn" style="display: none;" onclick="document.getElementById('bookTableBtn')?.click()">
     <span class="glass-nav__icon">📅</span><span class="glass-nav__label">Book</span>
   </button>
+  
+  <a href="my-orders.html" class="glass-nav__item" id="navOrdersBtn" style="display: none;">
+    <span class="glass-nav__icon">🧾</span><span class="glass-nav__label">Orders</span>
+  </a>
+  <a href="my-reservations.html" class="glass-nav__item" id="navBookingsBtn" style="display: none;">
+    <span class="glass-nav__icon">📅</span><span class="glass-nav__label">Bookings</span>
+  </a>
+
   <button type="button" class="glass-nav__item" id="navCartBtn" style="display: none;" onclick="document.getElementById('cartToggleBtn')?.click()">
     <span class="glass-nav__icon" style="position: relative;">🛒<span id="cartBadge" class="badge" style="display: none; position: absolute; top: -5px; right: -12px; background: #e85d04; color: white; font-size: 10px; padding: 2px 6px; border-radius: 50%; font-weight: bold;">0</span></span><span class="glass-nav__label">Cart</span>
   </button>
@@ -178,6 +186,18 @@
       item.href = 'profile.html' + (_rq ? '?restaurant=' + encodeURIComponent(_rq) : '');
       label.textContent = 'Profile';
       item.querySelector('.glass-nav__icon').textContent = '👤';
+      
+      // Show Orders and Bookings for logged-in users
+      const navOrders = document.getElementById('navOrdersBtn');
+      const navBookings = document.getElementById('navBookingsBtn');
+      if (navOrders) {
+          navOrders.style.display = 'flex';
+          navOrders.href = 'my-orders.html' + (_rq ? '?restaurant=' + encodeURIComponent(_rq) : '');
+      }
+      if (navBookings) {
+          navBookings.style.display = 'flex';
+          navBookings.href = 'my-reservations.html' + (_rq ? '?restaurant=' + encodeURIComponent(_rq) : '');
+      }
     } else {
       item.href = 'auth.html';
       label.textContent = 'Sign In';
