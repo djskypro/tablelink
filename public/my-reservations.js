@@ -74,3 +74,17 @@ function listenToReservationUpdates() {
         }).subscribe();
 }
 initReservations();
+
+window.goBookTable = function(e) {
+    if (e) e.preventDefault();
+    
+    // Check if we are already inside a restaurant
+    const restId = new URLSearchParams(window.location.search).get('restaurant');
+    
+    if (restId) {
+        window.location.href = 'index.html?restaurant=' + restId;
+    } else {
+        // If no restaurant, send them to the homepage and scroll to the restaurant list
+        window.location.href = 'index.html#restaurantGrid';
+    }
+};
