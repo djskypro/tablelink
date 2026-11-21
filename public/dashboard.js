@@ -16,6 +16,8 @@ window.switchTab = function(tabId, btnElement) {
 
     if (tabId !== 'scanner' && html5QrCode) { html5QrCode.stop().then(() => { html5QrCode = null; }).catch(err => console.log(err)); }
 
+    if (tabId === 'orders') document.getElementById('refreshOrdersBtn').style.display = 'flex';
+    else document.getElementById('refreshOrdersBtn').style.display = 'none';
     if (tabId === 'menu') fetchMenuItems();
     if (tabId === 'reviews') fetchReviews();
     if (tabId === 'reservations') fetchReservations();
@@ -510,4 +512,24 @@ window.copyRestaurantLink = async function() {
         document.body.removeChild(textArea);
         alert("✅ Link copied to clipboard!");
     }
+};
+
+window.manualRefreshOrders = async function() {
+    const icon = document.getElementById('refreshIcon');
+    const btn = document.getElementById('refreshOrdersBtn');
+    
+    // Spin the icon
+    icon.style.transform = 'rotate(360deg)';
+    btn.textContent = 'Checking...';
+    btn.disabled = true;
+
+    // Fetch the latest orders
+    await fetchOrders();
+
+    // Reset the button after 1 second
+    setTimeout(() => {
+        icon.style.transform = 'rotate(0deg)';
+        btn.innerHTML = '<span id="refreshIcon" style="display: inline-block; transition: transform 0.3s;">🔄</span> Check New Orders';
+        btn.disabled = false;
+    }, 1000);
 };

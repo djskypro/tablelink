@@ -311,5 +311,11 @@
     <script src="supabase-config.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="dashboard.js?v=9999"></script>
+
+    <!-- Floating Refresh Button -->
+    <button id="refreshOrdersBtn" onclick="manualRefreshOrders()" style="display: none; position: fixed; bottom: 90px; right: 20px; background: #e85d04; color: white; border: none; padding: 12px 20px; border-radius: 50px; font-weight: bold; font-size: 1rem; box-shadow: 0 4px 15px rgba(232,93,4,0.4); z-index: 999; cursor: pointer; align-items: center; gap: 8px;">
+        <span id="refreshIcon" style="display: inline-block; transition: transform 0.3s;">🔄</span> Check New Orders
+    </button>
+
 </body>
 </html>
