@@ -82,6 +82,7 @@ async function initDashboard() {
                 if (newCat) myCategoryId = newCat[0].id;
             }
             fetchOrders();
+            listenToNewOrders(); // <-- Turn on real-time listening!
             listenToNewOrders();
             fetchRequests();
             listenToNewRequests();
