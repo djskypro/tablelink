@@ -28,7 +28,7 @@ async function fetchMyReservations() {
     const container = document.getElementById('reservationsContainer');
     if (error) { container.innerHTML = `<p style="color:red; text-align:center;">Error: ${error.message}</p>`; return; }
     if (!data || data.length === 0) {
-        container.innerHTML = `<div style="text-align:center; margin-top:50px;"><p style="color:#6b6b6b; font-size:1.1rem;">You haven't booked any tables yet.</p><a href="index.html${restId ? '?restaurant='+restId : ''}" class="btn-primary" style="margin-top:15px; display:inline-block;">Book a Table</a></div>`;
+        container.innerHTML = `<div style="text-align:center; margin-top:50px;"><p style="color:#6b6b6b; font-size:1.1rem;">You haven't booked any tables yet.</p><a href="#" onclick="goBookTable(event)" class="btn-primary" style="margin-top:15px; display:inline-block;">Book a Table</a></div>`;
         return;
     }
 
